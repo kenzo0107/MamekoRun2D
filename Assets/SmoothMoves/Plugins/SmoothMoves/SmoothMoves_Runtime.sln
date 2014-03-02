@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB9-8B4A-11D0-8D11-00A0C91BC942}") = "SmoothMoves_Runtime", "SmoothMoves_Runtime.dll", "{CEEFF451-CA00-4E6B-AB2D-235FDDBA28C5}"
+	ProjectSection(MonoDevelopProperties) = preProject
+		name = SmoothMoves_Runtime
+		Configurations = $0
+		$0.Configuration = $1
+		$1.name = Default
+		$1.OutputPath = .\
+		$1.ctype = ProjectConfiguration
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Default|Any CPU = Default|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CEEFF451-CA00-4E6B-AB2D-235FDDBA28C5}.Default|Any CPU.ActiveCfg = Default|Any CPU
+		{CEEFF451-CA00-4E6B-AB2D-235FDDBA28C5}.Default|Any CPU.Build.0 = Default|Any CPU
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = SmoothMoves_Runtime.dll
+	EndGlobalSection
+EndGlobal
