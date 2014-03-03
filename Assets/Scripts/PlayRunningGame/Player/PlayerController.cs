@@ -89,52 +89,51 @@ namespace PlayRunningGame.Player {
 				else {
 					dustStorm.SetActive( false );
 				}
-			}
 
-			IsJumpEnabaled	= false;
-			isDoubleJump	= false;
+				IsJumpEnabaled	= false;
+				isDoubleJump	= false;
 
-	#if UNITY_EDITOR
-			if ( Input.GetMouseButtonDown(0) ) {
-				if ( true == isGrounded ) {
-					IsJumpEnabaled	= true;
-					jump	= JumpForce;
-				}
-				else if( false == isGrounded && 0 < jumpEnableCount ) {
-					jump	= JumpForce;
-					IsJumpEnabaled	= true;
-					isDoubleJump	= true;
-					jumpEnableCount--;
-				}
-			}
-	#else
-			if ( Input.touchCount > 0 ) {
-				
-				foreach ( Touch touch in Input.touches ) {
-					
-					// タッチ or ムーブの場合.
-					if ( 
-					    Input.GetTouch(0).phase == TouchPhase.Began
-					    ) {
-
-						if ( true == isGrounded ) {
-							IsJumpEnabaled	= true;
-						}
-						else if( false == isGrounded && 0 < jumpEnableCount ) {
-							IsJumpEnabaled	= true;
-							isDoubleJump	= true;
-							jumpEnableCount--;
-						}
-
+#if UNITY_EDITOR
+				if ( Input.GetMouseButtonDown(0) ) {
+					if ( true == isGrounded ) {
+						IsJumpEnabaled	= true;
+						jump	= JumpForce;
+					}
+					else if( false == isGrounded && 0 < jumpEnableCount ) {
+						jump	= JumpForce;
+						IsJumpEnabaled	= true;
+						isDoubleJump	= true;
+						jumpEnableCount--;
 					}
 				}
-			}
-	#endif
+#else
+				if ( Input.touchCount > 0 ) {
+					
+					foreach ( Touch touch in Input.touches ) {
+						
+						// タッチ or ムーブの場合.
+						if ( 
+						    Input.GetTouch(0).phase == TouchPhase.Began
+						    ) {
 
-			if ( true == IsJumpEnabaled && 0 < jumpEnableCount ) {
-				executeJump();
-			}
+							if ( true == isGrounded ) {
+								IsJumpEnabaled	= true;
+							}
+							else if( false == isGrounded && 0 < jumpEnableCount ) {
+								IsJumpEnabaled	= true;
+								isDoubleJump	= true;
+								jumpEnableCount--;
+							}
 
+						}
+					}
+				}
+#endif
+
+				if ( true == IsJumpEnabaled && 0 < jumpEnableCount ) {
+					executeJump();
+				}
+			}
 		}
 
 		/// <summary>
@@ -243,6 +242,13 @@ namespace PlayRunningGame.Player {
 		/// </summary>
 		void setCurrentSpeed( ) {
 			AddSpeedRight	= 0f;
+		}
+
+		/// <summary>
+		/// Sets the is controller.
+		/// </summary>
+		void setIsController( bool boolean ) {
+			IsController	= boolean;
 		}
 	}
 }

@@ -35,9 +35,13 @@ public class LoadLevelManager : MonoBehaviour {
 
 		if ( false == isLoaded ) {
 
+			if ( 0 == Time.timeScale )	Time.timeScale	= 1;
+
 			isLoaded	= true;
 
 			yield return StartCoroutine( Zoom( true ) );
+
+			Resources.UnloadUnusedAssets();
 
 			Application.LoadLevel( scene );
 		}
@@ -100,7 +104,7 @@ public class LoadLevelManager : MonoBehaviour {
 
 		GameObject obj = (GameObject)Instantiate( Resources.Load( "Common/FadeInOut" ), Vector3.zero , Quaternion.identity);
 		obj.transform.parent			= GameObject.Find( "Anchor" ).transform;
-		obj.transform.localPosition	= new Vector3( 0, 0, - 300 );
+		obj.transform.localPosition	= new Vector3( 0, 0, -300 );
 		obj.transform.localScale		= Vector3.one;
 
 		return obj;

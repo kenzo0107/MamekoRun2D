@@ -10,7 +10,6 @@ Assembly-UnityScript-firstpass.unityproj
 Assembly-UnityScript-firstpass-vs.unityproj
 
 Assembly-*
-*.meta
 *.svn*
 
 MamekoRun2D-csharp.sln

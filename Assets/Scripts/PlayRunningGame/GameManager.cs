@@ -111,6 +111,14 @@ namespace PlayRunningGame {
 			_objBtnGameOver.transform.localPosition	= Vector3.zero;
 		}
 
+		/// <summary>
+		/// Retire this instance.
+		/// </summary>
+		void RetireGame( ) {
+			Destroy ( PlayerObj );
+			this.SendMessage( "OnClickButton" );
+		}
+
 		#region OnGUI
 		/*	
 		/// <summary>
