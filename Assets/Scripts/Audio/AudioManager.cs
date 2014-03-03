@@ -69,7 +69,7 @@ namespace Audio {
 		/// <summary>
 		/// Plaies the bgm by scene.
 		/// </summary>
-		void PlayBgmByScene( int level ) {
+		public void PlayBgmByScene( int level ) {
 
 			if ( Audio.AudioConfig.sceneBgmList.ContainsKey( level ) ) {
 				PlayBGM( Audio.AudioConfig.sceneBgmList[ level ] );
@@ -129,6 +129,20 @@ namespace Audio {
 		public void StopBGM() {
 			this.bgmSource.Stop();
 			this.bgmSource.clip = null;
+		}
+
+		/// <summary>
+		/// Pauses the background.
+		/// </summary>
+		public void PauseBGM( ) {
+			this.bgmSource.Pause();
+		}
+
+		/// <summary>
+		/// Res the start.
+		/// </summary>
+		public void ReStart( ) {
+			this.bgmSource.Play();
 		}
 	}
 }
