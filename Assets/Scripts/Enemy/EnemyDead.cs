@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+using Audio;
+
 public class EnemyDead : MonoBehaviour {
 
 	/// <summary>
@@ -12,7 +14,7 @@ public class EnemyDead : MonoBehaviour {
 		if ( coll.gameObject.name.Contains( "Player" ) ) {
 
 			// 敵キャラ倒されたSE再生.
-			Audio.AudioManager.Instance.PlaySE( "se_scratchy_jump_rnd_01" );
+			AudioManager.Instance.PlaySE( AudioConfig.EnemyDie );
 
 			// 敵キャラ消滅パーティクル演出.
 			PrefabPoolManager.Instance.instantiatePrefab( "CFXM3_Hit_SmokePuff", this.gameObject.transform.position, Quaternion.identity );

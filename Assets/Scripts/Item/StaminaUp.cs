@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+using Audio;
+
 public class StaminaUp : MonoBehaviour {
 	
 	/// <summary>
@@ -11,7 +13,7 @@ public class StaminaUp : MonoBehaviour {
 
 		if ( coll.gameObject.CompareTag( "Player" ) ) {
 			// コイン取得音再生.
-			Audio.AudioManager.Instance.PlaySE( "se_cute_rising_sequence_01" );
+			AudioManager.Instance.PlaySE( AudioConfig.SePlayerStaminaUp );
 			// Destroy.
 			Destroy ( this.gameObject );
 		}

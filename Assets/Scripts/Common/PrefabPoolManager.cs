@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,16 +12,17 @@ using System.Collections.Generic;
 public class PrefabPoolManager : SingletonMonoBehaviour<PrefabPoolManager>{
 	
 	private Dictionary<string,PrefabFamiliy> prefabFamilies = new Dictionary<string, PrefabFamiliy>();
-	//インスペクタ設定用. 必要なデータを保存する.
+	///<summary>インスペクタ設定用. 必要なデータを保存する.</summary>
 	public PreloadPrefabInfo[] preloadPrefabInfo;
 	
-	//起動時にPreloadPrefabに設定されたObjectを指定個数確保.
-	//シーン遷移時にも追加で確保できるようにbase.Awake()前にロードする.
-	//このタイミングで行うことによって、廃棄される新しいシーンのMPrefabが,
-	//前のシーンから引き継がれているMPrefabにアクセスできる.
-	//
+	///<summary>
+	/// 起動時にPreloadPrefabに設定されたObjectを指定個数確保.
+	/// シーン遷移時にも追加で確保できるようにbase.Awake()前にロードする.
+	/// このタイミングで行うことによって、廃棄される新しいシーンのMPrefabが.
+	/// 前のシーンから引き継がれているMPrefabにアクセスできる.
+	/// </summary>
 	new void Awake(){
-		PrefabPoolManager.Instance.PreloadPrefab(preloadPrefabInfo);
+		PrefabPoolManager.Instance.PreloadPrefab( preloadPrefabInfo );
 		base.Awake();
 	}
 	
@@ -44,9 +45,9 @@ public class PrefabPoolManager : SingletonMonoBehaviour<PrefabPoolManager>{
 	/// <param name="prefabPath">Prefab path.</param>
 	public bool LoadPrefab(string prefabPath){
 		//同名ファイルはロードさせない.
-		string prefabName = GetPrefabName(prefabPath);
-		if(prefabFamilies.ContainsKey(prefabName))return false;
-		prefabFamilies[prefabName] = new PrefabFamiliy(prefabPath);
+		string prefabName = GetPrefabName( prefabPath );
+		if( prefabFamilies.ContainsKey( prefabName ) )	return false;
+		prefabFamilies[prefabName] = new PrefabFamiliy( prefabPath );
 		return true;
 	}
 
@@ -55,7 +56,7 @@ public class PrefabPoolManager : SingletonMonoBehaviour<PrefabPoolManager>{
 	/// </summary>
 	/// <param name="prefabPath">Prefab path.</param>
 	public void UnloadPrefab(string prefabPath){
-		string prefabName = GetPrefabName(prefabPath);
+		string prefabName = GetPrefabName( prefabPath );
 		prefabFamilies[prefabName].Unload();
 		prefabFamilies[prefabName]=null;
 		Resources.UnloadUnusedAssets();
@@ -202,7 +203,7 @@ public class PrefabPoolManager : SingletonMonoBehaviour<PrefabPoolManager>{
 		PrefabFamiliy familiy;
 		GameObject prefab;
 		string prefabName = GetPrefabName(prefabPath);
-		
+
 		if(!prefabFamilies.ContainsKey(prefabName)){
 			LoadPrefab(prefabName);
 		}
@@ -219,13 +220,57 @@ public class PrefabPoolManager : SingletonMonoBehaviour<PrefabPoolManager>{
 //		//2.リリースしてあるのがあればそれを使う.
 //		if(familiy.releasedAmount>0){
 			prefab = familiy.GetReleasedPrefab();
-
-			prefab.transform.position	= position;
-			prefab.transform.rotation	= rotation;
+			Transform transformPrefab	= prefab.transform;
+			transformPrefab.position	= position;
+			transformPrefab.rotation	= rotation;
 			prefab.SetActive(true);
 
+			if ( prefab.GetComponent<ParticleSystem>() ) {
+				StartCoroutine( WaitingForRelease( prefab, prefab.GetComponent<ParticleSystem>().duration ) );
+			}
+		}
+	}
+
+	/// <summary>
+	/// Instantiates the prefab.
+	/// </summary>
+	/// <param name="prefabPath">Prefab path.</param>
+	/// <param name="position">Position.</param>
+	/// <param name="rotation">Rotation.</param>
+	/// <param name="parentTransfom">Parent transfom.</param>
+	public void instantiatePrefab(string prefabPath, Vector3 position, Quaternion rotation, Transform parentTransfom ){
+		PrefabFamiliy familiy;
+		GameObject prefab;
+		string prefabName = GetPrefabName(prefabPath);
+		
+		if(!prefabFamilies.ContainsKey(prefabName)){
+			LoadPrefab(prefabName);
+		}
+		
+		//対象を一時変数に代入.
+		familiy = prefabFamilies[prefabName];
+		
+		if(familiy.releasedAmount==0){
+			prefab=(GameObject)Instantiate(familiy.sourcePrefab, position, rotation);
+			prefab.name=prefabName;
+			familiy.Add(prefab);
+		}
+		else { 
+			//		//2.リリースしてあるのがあればそれを使う.
+			//		if(familiy.releasedAmount>0){
+			prefab = familiy.GetReleasedPrefab();
+			Transform transformPrefab	= prefab.transform;
+			transformPrefab.position	= position;
+			transformPrefab.rotation	= rotation;
+			transformPrefab.parent		= parentTransfom;
+			prefab.SetActive(true);
+
+<<<<<<< HEAD
+=======
 			// TODO 
-			StartCoroutine( WaitingForRelease( prefab, prefab.GetComponent<ParticleSystem>().duration ) );
+			if ( prefab.GetComponent<ParticleSystem>() ) {
+				StartCoroutine( WaitingForRelease( prefab, prefab.GetComponent<ParticleSystem>().duration ) );
+			}
 		}
 	}
 

@@ -1,5 +1,5 @@
 ﻿// デバッグフラグ.
-#define DEBUG
+//#define DEBUG
 // テスト環境.
 #define TEST
 

@@ -3,7 +3,9 @@ using System.Collections;
 
 public class TotalGameManager : SingletonMonoBehaviour<TotalGameManager> {
 
+	/// <summary>The audio manager.</summary>
 	private static GameObject audioManager;
+	/// <summary>The debug manager.</summary>
 	private static GameObject debugManager;
 
 	/// <summary>

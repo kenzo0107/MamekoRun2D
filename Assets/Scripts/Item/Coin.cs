@@ -9,27 +9,27 @@ public class Coin : MonoBehaviour {
 	#endregion
 
 	#region private members.
-	private GameObject	_gameManager;
+	private GameObject	gameManager;
 	#endregion
 
 	/// <summary>
 	/// Awake this instance.
 	/// </summary>
-	void Awake( ) {
-		_gameManager	= GameObject.Find ( "_GameManager" ).gameObject;
+	private void Awake( ) {
+		gameManager	= GameObject.Find ( "/_GameManager" );
 	}
 
 	/// <summary>
 	/// Raises the trigger enter2 d event.
 	/// </summary>
 	/// <param name="coll">Coll.</param>
-	void OnTriggerEnter2D( Collider2D coll ) {
+	private void OnTriggerEnter2D( Collider2D coll ) {
 		if ( coll.gameObject.CompareTag( "Player" ) ) {
 			// コイン取得音再生.
 			AudioSource.PlayClipAtPoint( CoinClips, transform.position );
 
 			// 点数加算.
-			_gameManager.SendMessage( "addScore", Score );
+			gameManager.SendMessage( "addScore", Score );
 
 			// Destroy.
 			Destroy ( this.gameObject );

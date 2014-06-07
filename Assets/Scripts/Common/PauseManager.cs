@@ -5,18 +5,28 @@ public class PauseManager : MonoBehaviour {
 
 	#region public members.
 	public GameObject Popup;
-	public GameObject Player;
 	#endregion public members.
+
+	#region private members.
+	private GameObject objPlayer;
+	#endregion private members.
+
+	/// <summary>
+	/// Awake this instance.
+	/// </summary>
+	private void Awake( ) {
+		objPlayer	= GameObject.Find( "Player" );
+	}
 
 	/// <summary>
 	/// Sets the popup active.
 	/// </summary>
-	void setPopupActive( ) {
+	private void setPopupActive( ) {
 		if ( false == Popup.activeSelf ) {
 			//  時間軸停止 .
 			Time.timeScale	= 0;
 			// プレイヤー一時停止.
-			Player.SendMessage( "setIsController", false );
+			objPlayer.SendMessage( "setIsController", false );
 			// BGM停止.
 			Audio.AudioManager.Instance.PauseBGM( );
 			// ポップアップ表示.
@@ -26,7 +36,7 @@ public class PauseManager : MonoBehaviour {
 			//  時間軸通常.
 			Time.timeScale	= 1;
 			// プレイヤーコントロールOK.
-			Player.SendMessage( "setIsController", true );
+			objPlayer.SendMessage( "setIsController", true );
 			// BGM再開.
 			Audio.AudioManager.Instance.ReStart( );
 			// ポップアップ非表示.

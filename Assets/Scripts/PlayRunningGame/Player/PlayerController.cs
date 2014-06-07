@@ -1,6 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+using PlayRunningGame.Player;
+
+<<<<<<< HEAD
+<<<<<<< HEAD
+using Audio;
+
+=======
+>>>>>>> FETCH_HEAD
+=======
+>>>>>>> FETCH_HEAD
 namespace PlayRunningGame.Player {
 
 	public class PlayerController : MonoBehaviour {
@@ -16,8 +26,12 @@ namespace PlayRunningGame.Player {
 		#endregion
 
 		#region private members.
+		/// <summary>ゲームマネージャーobj.</summary>
 		private GameObject	gameManager;
+		/// <summary>走るときの砂埃obj.</summary>
 		private GameObject	dustStorm;
+		/// <summary>バリアobj.</summary>
+		private GameObject	barrier;
 		private Transform	groundCheck;				// A position marking where to check if the player is grounded.
 		private bool		isGrounded		= false;
 		private bool		isDoubleJump	= false;
@@ -37,19 +51,36 @@ namespace PlayRunningGame.Player {
 		#endregion
 
 		/// <summary>
+		/// Sets the effect.
+		/// </summary>
+		/// <param name="prefabName">Prefab name.</param>
+		public void SetEffect( string prefabName ) {
+			PrefabPoolManager.Instance.instantiatePrefab( prefabName, this.transform.localPosition, Quaternion.identity, this.transform );
+		}
+
+		/// <summary>
+		/// Sets the aura.
+		/// </summary>
+		/// <param name="isActive">If set to <c>true</c> is active.</param>
+		public void SetAura( bool isActive ) {
+			if ( barrier )	barrier.SetActive( isActive );
+		}
+		
+		/// <summary>
 		/// Awake this instance.
 		/// </summary>
-		void Awake( ) {
+		private void Awake( ) {
 
 			// デフォルトスピード.
-			SpeedRight	= PlayRunningGame.Player.PlayerConfig.DefaultSpeedRight;
+			SpeedRight	= PlayerConfig.DefaultSpeedRight;
 			AddSpeedRight	= 0.0f;
 
 			// Setting up references.
-			gameManager		= GameObject.Find ( "_GameManager" );
+			gameManager		= GameObject.Find ( "/_GameManager" );
 
 			groundCheck = transform.FindChild( "groundCheck" );
 			dustStorm	= transform.FindChild( "Dust Storm" ).gameObject;
+			barrier		= transform.FindChild( "Barrier" ).gameObject;
 
 			GameObject BoneAnimation	= transform.FindChild( "BoneAnimation" ).gameObject;
 			anim		= BoneAnimation.GetComponent<Animation>();
@@ -61,7 +92,7 @@ namespace PlayRunningGame.Player {
 		/// <summary>
 		/// Update this instance.
 		/// </summary>
-		void Update () {
+		private void Update () {
 
 			// 操作可能.
 			if ( true == IsController ) {
@@ -73,7 +104,7 @@ namespace PlayRunningGame.Player {
 					// アニメーションがRunステータスでない場合、Runに設定.
 					if ( AnimationStatusList.Run != animStatus ) {
 						animStatus	= AnimationStatusList.Run;
-						setAnimation( animStatus );
+						SetAnimation( animStatus );
 					}
 
 					// 地上にいる場合のみ、砂埃を出す.
@@ -85,7 +116,7 @@ namespace PlayRunningGame.Player {
 						jumpEnableCount	= JumpEnableCountMax;
 					}
 				}
-				// // 空中にいる場合は砂埃を出さない.
+				// 空中にいる場合は砂埃を出さない.
 				else {
 					dustStorm.SetActive( false );
 				}
@@ -131,7 +162,7 @@ namespace PlayRunningGame.Player {
 #endif
 
 				if ( true == IsJumpEnabaled && 0 < jumpEnableCount ) {
-					executeJump();
+					ExecuteJump();
 				}
 			}
 		}
@@ -139,15 +170,15 @@ namespace PlayRunningGame.Player {
 		/// <summary>
 		/// Fixeds the update.
 		/// </summary>
-		void FixedUpdate ( ) {
+		private void FixedUpdate ( ) {
 
 			// プレイ不可状態.
 			if ( IsDead ) {
 
 				// プレイヤーがDead状態になったときにmp3再生.
-				Audio.AudioManager.Instance.PlaySE( "se_die" );
+				AudioManager.Instance.PlaySE( AudioConfig.SePlayerDie );
 				//  GameManagerにプレイヤーがDead状態であることを伝える.
-				gameManager.SendMessage( "setPlayerDie" );
+				gameManager.SendMessage( "SetPlayerDie" );
 				// プレイヤーGameObject破棄.
 				Destroy ( this.gameObject );
 			}
@@ -163,21 +194,43 @@ namespace PlayRunningGame.Player {
 		/// 空中ジャンプ時の演出.
 		///  ジャンプ音再生.
 		/// </summary>
-		void executeJump( ) {
+		private void ExecuteJump( ) {
+<<<<<<< HEAD
+<<<<<<< HEAD
+			// プレイヤージャンプ処理.
+			Jump( JumpForce );
+		}
+=======
+>>>>>>> FETCH_HEAD
+=======
+>>>>>>> FETCH_HEAD
 
+		/// <summary>
+		/// プレイヤージャンプ処理.
+		/// </summary>
+		private void Jump( float jumpforce ) {
 			// animation status Jump.
 			animStatus	= AnimationStatusList.JumpUp;
-
+			
 			// 空中ジャンプ中演出.
 			if ( true == isDoubleJump ) {
 				// 回転ジャンプ.
 				animStatus	= AnimationStatusList.JumpRotate;
-
+				
 				PrefabPoolManager.Instance.instantiatePrefab( "CFXM3_Hit_Light_B_Air", transform.localPosition, Quaternion.identity );
-//				GameObject jumpEffect	= (GameObject)Instantiate( Resources.Load ( "JMO Assets/Cartoon FX/CFX3 Prefabs (Mobile)/Light/CFXM3_Hit_Light_B_Air" ), Vector3.zero, Quaternion.identity );
 			}
+			
+			SetAnimation( animStatus );
+			this.rigidbody2D.velocity = Vector3.up * jumpforce;
 
-			setAnimation( animStatus );
+<<<<<<< HEAD
+<<<<<<< HEAD
+			//  ジャンプSE再生.
+			AudioManager.Instance.PlaySE( AudioConfig.SePlayerJump );
+=======
+=======
+>>>>>>> FETCH_HEAD
+			SetAnimation( animStatus );
 
 			// プレイヤージャンプ処理.
 			Jump( JumpForce );
@@ -188,16 +241,17 @@ namespace PlayRunningGame.Player {
 		/// <summary>
 		/// プレイヤージャンプ処理.
 		/// </summary>
-		void Jump( float jumpforce ) {
+		private void Jump( float jumpforce ) {
 			this.rigidbody2D.velocity = Vector3.up * jumpforce;
 	//		rigidbody2D.AddForce( new Vector2( 0f, jumpforce ) );
+>>>>>>> FETCH_HEAD
 		}
 
 		/// <summary>
-		/// Sets the animation.
+		/// Animation設定.
 		/// </summary>
 		/// <param name="status">Status.</param>
-		private void setAnimation( AnimationStatusList status ) {
+		private void SetAnimation( AnimationStatusList status ) {
 			Debug.Log ( System.Convert.ToString ( status ) );
 			anim.Play ( System.Convert.ToString ( status ) );
 		}
@@ -206,26 +260,27 @@ namespace PlayRunningGame.Player {
 		/// Raises the collision enter2 d event.
 		/// </summary>
 		/// <param name="coll">Coll.</param>
-		void OnCollisionEnter2D( Collision2D coll ) {
+		private void OnCollisionEnter2D( Collision2D coll ) {
 
-	//		Debug.Log ( "coll.gameObject.name=" + coll.gameObject.name );
-
+			// 敵と衝突.
 			if ( coll.gameObject.CompareTag( "KillPlayer" )  ) {
-				Debug.Log ( "OnCollisionEnter2D::KillPlayer" );
 				IsDead	= true;
 			}
-		}
 
+			// シーソーと衝突.
+			if ( coll.gameObject.CompareTag( "Seesaw" ) ) {
+				OnSeesaw( );
+			}
+		}
+		
 		/// <summary>
 		/// Raises the trigger enter2 d event.
 		/// </summary>
 		/// <param name="coll">Coll.</param>
-		void OnTriggerEnter2D( Collider2D coll ) {
+		private void OnTriggerEnter2D( Collider2D coll ) {
 
-	//		Debug.Log ( "coll.gameObject.name=" + coll.gameObject.name );
-
+			// 敵と衝突.
 			if ( coll.gameObject.CompareTag( "KillPlayer" )  ) {
-//				Debug.Log ( "OnTriggerEnter2D::KillPlayer" );
 				IsDead	= true;
 			}
 		}
@@ -233,22 +288,29 @@ namespace PlayRunningGame.Player {
 		/// <summary>
 		/// Speeds up.
 		/// </summary>
-		void SpeedUp( ) {
-			AddSpeedRight	= PlayRunningGame.Player.PlayerConfig.AddSpeedRight;
+		private void SpeedUp( ) {
+			AddSpeedRight	= PlayerConfig.AddSpeedRight;
 		}
 
 		/// <summary>
 		/// Sets the current speed.
 		/// </summary>
-		void setCurrentSpeed( ) {
+		private void SetCurrentSpeed( ) {
 			AddSpeedRight	= 0f;
 		}
 
 		/// <summary>
 		/// Sets the is controller.
 		/// </summary>
-		void setIsController( bool boolean ) {
+		private void setIsController( bool boolean ) {
 			IsController	= boolean;
+		}
+
+		/// <summary>
+		/// Raises the seesaw event.
+		/// </summary>
+		private void OnSeesaw( ) {
+			Jump( JumpForce * 1.4f );
 		}
 	}
 }

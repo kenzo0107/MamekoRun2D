@@ -4,6 +4,8 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
+using Audio;
+
 namespace Audio {
 
 	public class AudioManager : SingletonMonoBehaviour<AudioManager> {
@@ -42,6 +44,7 @@ namespace Audio {
 			this.seDict		= new Dictionary<string, AudioClip>();
 			
 			Action<Dictionary<string,AudioClip>,AudioClip> addClipDict = (dict, c) => {
+
 				if( !dict.ContainsKey( c.name ) ) {
 					dict.Add(c.name,c); 
 				}
@@ -71,8 +74,8 @@ namespace Audio {
 		/// </summary>
 		public void PlayBgmByScene( int level ) {
 
-			if ( Audio.AudioConfig.sceneBgmList.ContainsKey( level ) ) {
-				PlayBGM( Audio.AudioConfig.sceneBgmList[ level ] );
+			if ( AudioConfig.sceneBgmList.ContainsKey( level ) ) {
+				PlayBGM( AudioConfig.sceneBgmList[ level ] );
 			}
 			else {
 				StopBGM( );
