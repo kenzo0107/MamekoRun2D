@@ -3,14 +3,8 @@ using System.Collections;
 
 using PlayRunningGame.Player;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 using Audio;
 
-=======
->>>>>>> FETCH_HEAD
-=======
->>>>>>> FETCH_HEAD
 namespace PlayRunningGame.Player {
 
 	public class PlayerController : MonoBehaviour {
@@ -195,56 +189,31 @@ namespace PlayRunningGame.Player {
 		///  ジャンプ音再生.
 		/// </summary>
 		private void ExecuteJump( ) {
-<<<<<<< HEAD
-<<<<<<< HEAD
 			// プレイヤージャンプ処理.
 			Jump( JumpForce );
 		}
-=======
->>>>>>> FETCH_HEAD
-=======
->>>>>>> FETCH_HEAD
 
 		/// <summary>
 		/// プレイヤージャンプ処理.
 		/// </summary>
 		private void Jump( float jumpforce ) {
-			// animation status Jump.
+			// アニメーション - ジャンプ.
 			animStatus	= AnimationStatusList.JumpUp;
 			
 			// 空中ジャンプ中演出.
 			if ( true == isDoubleJump ) {
-				// 回転ジャンプ.
+				// アニメーション - 回転ジャンプ.
 				animStatus	= AnimationStatusList.JumpRotate;
 				
-				PrefabPoolManager.Instance.instantiatePrefab( "CFXM3_Hit_Light_B_Air", transform.localPosition, Quaternion.identity );
+				PrefabPoolManager.Instance.instantiatePrefab( EffectConfig.PlayerJumpEffect, transform.localPosition, Quaternion.identity );
 			}
-			
+			// アニメーション設定.
 			SetAnimation( animStatus );
 			this.rigidbody2D.velocity = Vector3.up * jumpforce;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 			//  ジャンプSE再生.
 			AudioManager.Instance.PlaySE( AudioConfig.SePlayerJump );
-=======
-=======
->>>>>>> FETCH_HEAD
 			SetAnimation( animStatus );
-
-			// プレイヤージャンプ処理.
-			Jump( JumpForce );
-			//  ジャンプSE再生.
-			Audio.AudioManager.Instance.PlaySE( "se_jump" );
-		}
-
-		/// <summary>
-		/// プレイヤージャンプ処理.
-		/// </summary>
-		private void Jump( float jumpforce ) {
-			this.rigidbody2D.velocity = Vector3.up * jumpforce;
-	//		rigidbody2D.AddForce( new Vector2( 0f, jumpforce ) );
->>>>>>> FETCH_HEAD
 		}
 
 		/// <summary>
@@ -252,7 +221,7 @@ namespace PlayRunningGame.Player {
 		/// </summary>
 		/// <param name="status">Status.</param>
 		private void SetAnimation( AnimationStatusList status ) {
-			Debug.Log ( System.Convert.ToString ( status ) );
+//			Debug.Log ( System.Convert.ToString ( status ) );
 			anim.Play ( System.Convert.ToString ( status ) );
 		}
 

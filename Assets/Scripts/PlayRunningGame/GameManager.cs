@@ -3,6 +3,7 @@ using UnityEngine;
 using System;
 using System.Collections;
 
+using PlayRunningGame;
 using PlayRunningGame.Player;
 using Audio;
 
@@ -27,7 +28,8 @@ namespace PlayRunningGame {
 		/// <summary> 背景0.</summary>
 		public GameObject	Bg0;
 		/// <summary>フィーバー中か判定.</summary>
-		public bool		isFever	= false;
+		public bool	isFever	= false;
+		public bool	IsFever { set{ this.isFever = value; } get{ return this.isFever; } }
 		#endregion
 
 		#region private members.
@@ -39,6 +41,8 @@ namespace PlayRunningGame {
 		private PlayerController	playerController;
 		/// <summary>プレイヤー追跡.</summary>
 		private ChasePlayer			chasePlayer;
+		/// <summary>フィーバー背景.</summary>
+		private GameObject			bgFever;
 
 		private Vector3				chasePlayerCameraPosition;
 		/// <summary>距離スコアLabel.</summary>
@@ -49,11 +53,13 @@ namespace PlayRunningGame {
 		private bool				isCameraEnableChasePlayer;
 		/// <summary>chasePlayerCamera最大ローカルポジション(X軸).</summary>
 		private float				maxChasePlayerCameraLocalPositionX;
-
+		/// <summary>フロアマップマネージャー.</summary>
 		private FloorMapManager				floorMapManager;
 
 		private Transform	playerTransform;
 		private Transform	chasePlayerCameraTransform;
+
+		private float		feverStartPlayerPosX;
 		#endregion
 
 		/// <summary>
@@ -67,6 +73,7 @@ namespace PlayRunningGame {
 			chasePlayerCameraTransform	= ChaserCamera.transform;
 			uiLabelDistanceScore		= DistanceScore.GetComponent<UILabel>();
 			floorMapManager				= this.GetComponent<FloorMapManager>();
+			bgFever						= chasePlayerCameraTransform.FindChild( "BgFever" ).gameObject;
 		}
 
 		/// <summary>
@@ -77,9 +84,9 @@ namespace PlayRunningGame {
 		}
 
 		/// <summary>
-		/// Fixeds the update.
+		/// Games the setting.
 		/// </summary>
-//		private void FixedUpdate( ) {
+		/// <returns>The setting.</returns>
 		private IEnumerator GameSetting( ) {
 
 			while ( true ) {
@@ -89,7 +96,17 @@ namespace PlayRunningGame {
 				if ( maxChasePlayerCameraLocalPositionX < Mathf.Floor( chasePlayerCameraPosition.x ) ) {
 					maxChasePlayerCameraLocalPositionX	= Mathf.Floor( chasePlayerCameraPosition.x );
 //					Debug.Log ( "maxChasePlayerCameraLocalPositionX:"+maxChasePlayerCameraLocalPositionX );
-					floorMapManager.InstantiateFloor( (int)maxChasePlayerCameraLocalPositionX );
+
+
+					if ( true == isFever ) {
+						if ( feverStartPlayerPosX + PlayRunningGameConfig.FloorMapForFeverLength() <= maxChasePlayerCameraLocalPositionX ) {
+							SetFeverFinish();
+						}
+						floorMapManager.InstantiateFloorFever( (int)maxChasePlayerCameraLocalPositionX, (int)feverStartPlayerPosX );
+					}
+					else {
+						floorMapManager.InstantiateFloor( (int)maxChasePlayerCameraLocalPositionX );
+					}
 				}
 				
 				if ( null != PlayerObj ) {
@@ -135,9 +152,42 @@ namespace PlayRunningGame {
 		/// フィーバー状態に設定.
 		/// </summary>
 		private void SetFever( ) {
-			Debug.Log ( "Fever!!!!!!!!!!!!!!!" );
+
+			feverStartPlayerPosX	= maxChasePlayerCameraLocalPositionX;
+			Debug.Log( "feverStartPlayerPosX:" + feverStartPlayerPosX );
+
+			// フィーバー状態に設定.
+			this.IsFever	= true;
+			// フィーバー背景活性化.
+			bgFever.SetActive( true );
+			// プレイヤーフィーバーSE.
+			AudioManager.Instance.PlaySE( AudioConfig.SePlayerFever );
+			// プレイヤーフィーバーエフェクト.
+			playerController.SetEffect( EffectConfig.PlayerElectricEffect );
+			// プレイヤーフィーバー開始エフェクト.
+			playerController.SetAura( true );
+			// フィーバーBGMに変更.
 			AudioManager.Instance.PlayBGM( AudioConfig.PlayRunningUnrivaled );
 		}
+
+		/// <summary>
+		/// フィーバー終了状態に設定.
+		/// </summary>
+		private void SetFeverFinish( ) {
+			// フィーバー終了状態に設定.
+			this.IsFever	= false;
+			// フィーバー背景活性化.
+			bgFever.SetActive( false );
+			// プレイヤーフィーバーSE.
+			AudioManager.Instance.PlaySE( AudioConfig.SePlayerFeverOut );
+			// プレイヤーバリアエフェクト.
+			playerController.SetAura( false );
+			// プレイヤーフィーバーエフェクト.
+			playerController.SetEffect( EffectConfig.PlayerElectricEffect );
+			// 通常BGMに変更.
+			AudioManager.Instance.PlayBGM( AudioConfig.PlayRunningDefault );
+		}
+
 
 		/// <summary>
 		/// プレイヤーが死判定.
@@ -153,30 +203,24 @@ namespace PlayRunningGame {
 
 				// BGM ストップ.
 				AudioManager.Instance.StopBGM();
-
 				// プレイヤー追跡カメラをブレーキ.
 				chasePlayer.SendMessage( "SetBrakeSpeed" );
 				// 背景のスクロールブレーキ.
 				Bg0.SendMessage( "BrakeScroll" );
 
-<<<<<<< HEAD
 				// スコアポップアップ表示.
 				InstantiatePopupScore( );
-=======
-				//  ゲームオーバーボタン生成.
-				InstantiateBtnGameOver( );
 			}
 		}
 
 		/// <summary>
-		/// InstantiateBtnGameOver
+		/// InstantiatePopupScore
 		/// </summary>
-		 private void InstantiateBtnGameOver( ) {
-			GameObject _objBtnGameOver	= (GameObject)Instantiate ( Resources.Load( "Common/BtnGameOver" ), Vector3.zero, Quaternion.identity );
-			_objBtnGameOver.transform.parent		= Anchor.transform;
-			_objBtnGameOver.transform.localScale	= Vector3.one;
-			_objBtnGameOver.transform.localPosition	= Vector3.zero;
->>>>>>> FETCH_HEAD
+		private void InstantiatePopupScore( ) {
+			GameObject obj	= (GameObject)Instantiate ( Resources.Load( "Popup/PopupScore" ), Vector3.zero, Quaternion.identity );
+			obj.transform.parent		= Anchor.transform;
+			obj.transform.localScale	= Vector3.one;
+			obj.transform.localPosition	= Vector3.zero;
 		}
 
 		/// <summary>

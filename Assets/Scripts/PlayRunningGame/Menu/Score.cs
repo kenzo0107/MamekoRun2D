@@ -35,17 +35,25 @@ namespace PlayRunningGame.Menu {
 		/// <param name="score">Score.</param>
 		private void addScore( int score ) {
 
-			currentGaugeForFever	+= score;
+			// フィーバー状態の場合、フィーバー用ゲージは増加しない.
+			if ( false == gameManager.IsFever ) {
 
-			if ( currentGaugeForFever >= PlayRunningGameConfig.MaxGaugeForFever ) {
-				// Fever.
-				gameManager.SendMessage( "SetFever" );
+				// フィーバー用ゲージアップ.
+				currentGaugeForFever	+= score;
 
-				currentGaugeForFever	-= PlayRunningGameConfig.MaxGaugeForFever;
+				if ( currentGaugeForFever >= PlayRunningGameConfig.MaxGaugeForFever ) {
+					// フィーバー状態.
+					gameManager.SendMessage( "SetFever" );
+
+					currentGaugeForFever	-= PlayRunningGameConfig.MaxGaugeForFever;
+				}
+
+				// フィーバー用ゲージアップ.
+				SetGuargeForFeverFormat( currentGaugeForFever );
 			}
-			SetGuargeForFeverFormat( currentGaugeForFever );
-
+			// スコアアップ.
 			currentCoinScore	+= score;
+			// スコア用フォーマットにセット.
 			SetCoinScoreFormat( currentCoinScore );
 		}
 

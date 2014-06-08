@@ -265,8 +265,6 @@ public class PrefabPoolManager : SingletonMonoBehaviour<PrefabPoolManager>{
 			transformPrefab.parent		= parentTransfom;
 			prefab.SetActive(true);
 
-<<<<<<< HEAD
-=======
 			// TODO 
 			if ( prefab.GetComponent<ParticleSystem>() ) {
 				StartCoroutine( WaitingForRelease( prefab, prefab.GetComponent<ParticleSystem>().duration ) );

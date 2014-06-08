@@ -15,8 +15,6 @@ namespace Audio {
 			{ (int)Config.SceneList.PlayRunningGame,	"bgm1" },
 		};
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 		/// <summary>プレイランニング デフォルト状態BGM.</summary>
 		public static readonly string PlayRunningDefault	= "bgm1";
 
@@ -38,11 +36,5 @@ namespace Audio {
 		/// <summary>SE 敵デッド.</summary>
 		public static readonly string EnemyDie			= "se_enemy_die";
 		#endregion se.
-=======
-		public static readonly string PlayRunningUnrivaled	= "bgm2";
->>>>>>> FETCH_HEAD
-=======
-		public static readonly string PlayRunningUnrivaled	= "bgm2";
->>>>>>> FETCH_HEAD
 	}
 }
