@@ -26,11 +26,13 @@ public class FloorMapManager : MonoBehaviour {
 		int tmpNum;
 		string tmpFlooerMap;
 		string tmpCoinMap;
+		string tmpSeesawMap;
 		float coinLocalPosY;
 
 		tmpNum			= num;
 		tmpFlooerMap	= PlayRunningGameConfig.FloorMap;
 		tmpCoinMap		= PlayRunningGameConfig.CoinMap;
+		tmpSeesawMap	= PlayRunningGameConfig.SeesawMap;
 
 		// ループさせる.
 		while ( tmpNum >= tmpFlooerMap.Length ) {
@@ -48,6 +50,10 @@ public class FloorMapManager : MonoBehaviour {
 //			Debug.Log ( String.Format( "coinLocalPosY:{0}", coinLocalPosY ) );
 			PrefabPoolManager.Instance.instantiatePrefab( "Coin", new Vector2( (float)( num + PlayRunningGameConfig.AdevancedPlayerPosX ), coinLocalPosY ), Quaternion.identity );
 		}
+
+		if ( tmpSeesawMap[ tmpNum ].ToString() != "0" ) {
+			PrefabPoolManager.Instance.instantiatePrefab( "Seesaw", new Vector2( (float)( num + PlayRunningGameConfig.AdevancedPlayerPosX ), 0f ), Quaternion.identity );
+		}
 	}
 
 	/// <summary>
@@ -63,8 +69,6 @@ public class FloorMapManager : MonoBehaviour {
 
 		// フロアマップのどのbitを利用するか.
 		tmpNum	= num - StartX;
-
-		Debug.Log( "tmpNum:" + tmpNum );
 
 		tmpFlooerMap	= PlayRunningGameConfig.FloorMapForFever;
 		tmpCoinMap		= PlayRunningGameConfig.CoinMapForFever;
