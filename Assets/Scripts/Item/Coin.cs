@@ -24,12 +24,28 @@ public class Coin : MonoBehaviour {
 	/// </summary>
 	/// <param name="coll">Coll.</param>
 	private void OnTriggerEnter2D( Collider2D coll ) {
-		if ( coll.gameObject.CompareTag( "Player" ) ) {
-			// コイン取得音再生.
-			AudioSource.PlayClipAtPoint( CoinClips, transform.position );
 
-			// 点数加算.
-			gameManager.SendMessage( "addScore", Score );
+		if ( coll.gameObject.CompareTag( "Player" ) ) {
+
+			switch( this.gameObject.tag ) {		
+				// コイン.
+				case( "Coin" ):
+					// コイン取得音再生.
+					AudioSource.PlayClipAtPoint( CoinClips, transform.position );
+					// 点数加算.
+					gameManager.SendMessage( "addScore", Score );
+					break;
+
+				// 巨大化アイテム.
+				case ( "Gigantic" ):
+					// コイン取得音再生.
+					AudioSource.PlayClipAtPoint( CoinClips, transform.position );
+					// 点数加算.
+					gameManager.SendMessage( "addScore", Score );
+					// プレイヤー巨大化.
+					gameManager.SendMessage( "SetPlayerGigantic" );
+					break;
+			}
 
 			// Destroy.
 			Destroy ( this.gameObject );

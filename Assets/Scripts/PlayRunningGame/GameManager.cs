@@ -27,9 +27,6 @@ namespace PlayRunningGame {
 		public GameObject	DistanceScore;
 		/// <summary> 背景0.</summary>
 		public GameObject	Bg0;
-		/// <summary>フィーバー中か判定.</summary>
-		public bool	isFever	= false;
-		public bool	IsFever { set{ this.isFever = value; } get{ return this.isFever; } }
 		#endregion
 
 		#region private members.
@@ -60,7 +57,18 @@ namespace PlayRunningGame {
 		private Transform	chasePlayerCameraTransform;
 
 		private float		feverStartPlayerPosX;
+		/// <summary>プレイヤー巨大化残り時間.</summary>
+		private float		playerGiganticRemainTime;
 		#endregion
+
+		#region property
+		/// <summary>フィーバー中か判定.</summary>
+		private	bool	isFever	= false;
+		public	bool	IsFever { set{ this.isFever = value; } get{ return this.isFever; } }
+		/// <summary>プレイヤー巨大化状態か判定.</summary>
+		private bool	isPlayerGigantic	= false;
+		public	bool	IsPlayerGigantic { set{ this.isPlayerGigantic = value; } get{ return this.isPlayerGigantic; } }
+		#endregion property
 
 		/// <summary>
 		/// Awake this instance.
@@ -81,6 +89,27 @@ namespace PlayRunningGame {
 		/// </summary>
 		private IEnumerator Start ( ) {
 			yield return StartCoroutine( GameSetting() );
+		}
+
+		/// <summary>
+		/// Fixeds the update.
+		/// </summary>
+		private void FixedUpdate( ) {
+
+			if ( false == isPlayerGigantic ) return;
+
+			playerGiganticRemainTime -= Time.deltaTime;
+
+			// 残り少なくなるとプレイヤー点滅.
+			if ( playerGiganticRemainTime < PlayRunningGameConfig.PlayerGiganticEffectRemainTime ) {
+				playerController.SetBlink( );
+			}
+
+			// 0以下で巨大化切れ.
+			if ( playerGiganticRemainTime <= 0f ) {
+				this.IsPlayerGigantic	= false;
+				SetPlayerGiganticFinish( );
+			}
 		}
 
 		/// <summary>
@@ -188,6 +217,23 @@ namespace PlayRunningGame {
 			AudioManager.Instance.PlayBGM( AudioConfig.PlayRunningDefault );
 		}
 
+		/// <summary>
+		/// プレイヤー巨大化.
+		/// </summary>
+		private void SetPlayerGigantic( ) {
+			this.IsPlayerGigantic		= true;
+			playerGiganticRemainTime	= PlayRunningGameConfig.PlayerGiganticTerm;
+			playerController.SetLocalSclae( PlayRunningGameConfig.PlayerGiganticRate );
+		}
+
+		
+		/// <summary>
+		/// プレイヤー巨大化.
+		/// </summary>
+		private void SetPlayerGiganticFinish( ) {
+			playerController.SetLocalSclae( 1f );
+			playerController.SetRenderEnabled( true );
+		}
 
 		/// <summary>
 		/// プレイヤーが死判定.

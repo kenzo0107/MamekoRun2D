@@ -26,6 +26,12 @@ namespace PlayRunningGame.Player {
 		private GameObject	dustStorm;
 		/// <summary>バリアobj.</summary>
 		private GameObject	barrier;
+		/// <summary>バリアobjのTransform.</summary>
+		private Transform	transformBarrier;
+		/// <summary>デフォルトプレイヤー  LocalScale.</summary>
+		private Vector2		defaultPlayerLocalScale;
+
+		private GameObject	BoneAnimation;
 		private Transform	groundCheck;				// A position marking where to check if the player is grounded.
 		private bool		isGrounded		= false;
 		private bool		isDoubleJump	= false;
@@ -42,6 +48,8 @@ namespace PlayRunningGame.Player {
 
 		private AnimationStatusList	animStatus;
 
+		/// <summary>点滅間隔.</summary>
+		private float blinkIntervalTime	= PlayRunningGameConfig.PlayerBlinkInterval;
 		#endregion
 
 		/// <summary>
@@ -59,7 +67,34 @@ namespace PlayRunningGame.Player {
 		public void SetAura( bool isActive ) {
 			if ( barrier )	barrier.SetActive( isActive );
 		}
-		
+
+		/// <summary>
+		/// Sets the gigantic.
+		/// </summary>
+		public void SetLocalSclae( float rate ) {
+			transform.localScale = defaultPlayerLocalScale * rate;
+		}
+
+		/// <summary>
+		/// Sets the blink.
+		/// </summary>
+		public void SetBlink( ) {
+			blinkIntervalTime += Time.deltaTime;
+			
+			if( blinkIntervalTime >= PlayRunningGameConfig.PlayerBlinkInterval ) {
+				blinkIntervalTime = 0f;
+				BoneAnimation.renderer.enabled	= !BoneAnimation.renderer.enabled;
+			} 
+		}
+
+		/// <summary>
+		/// Sets the render enabled.
+		/// </summary>
+		/// <param name="isEnabled">If set to <c>true</c> is enabled.</param>
+		public void SetRenderEnabled( bool isEnabled ) {
+			BoneAnimation.renderer.enabled	= isEnabled;
+		}
+
 		/// <summary>
 		/// Awake this instance.
 		/// </summary>
@@ -75,9 +110,12 @@ namespace PlayRunningGame.Player {
 			groundCheck = transform.FindChild( "groundCheck" );
 			dustStorm	= transform.FindChild( "Dust Storm" ).gameObject;
 			barrier		= transform.FindChild( "Barrier" ).gameObject;
+			transformBarrier	= barrier.transform;
 
-			GameObject BoneAnimation	= transform.FindChild( "BoneAnimation" ).gameObject;
-			anim		= BoneAnimation.GetComponent<Animation>();
+			defaultPlayerLocalScale	= transform.localScale;
+
+			BoneAnimation	= transform.FindChild( "BoneAnimation" ).gameObject;
+			anim			= BoneAnimation.GetComponent<Animation>();
 
 			// animation 初期値.
 			animStatus	= AnimationStatusList.Run;
@@ -279,7 +317,7 @@ namespace PlayRunningGame.Player {
 		/// Raises the seesaw event.
 		/// </summary>
 		private void OnSeesaw( ) {
-			Jump( JumpForce * 1.4f );
+			Jump( JumpForce * PlayRunningGameConfig.SeesawJumpForceRate );
 		}
 	}
 }
