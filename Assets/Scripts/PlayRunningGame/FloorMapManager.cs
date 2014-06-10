@@ -28,6 +28,7 @@ public class FloorMapManager : MonoBehaviour {
 		string tmpCoinMap;
 		string tmpSeesawMap;
 		string tmpGiganticItemMap;
+		string tmpEnemyItemMap;
 		float coinLocalPosY;
 
 		tmpNum				= num;
@@ -35,6 +36,7 @@ public class FloorMapManager : MonoBehaviour {
 		tmpCoinMap			= PlayRunningGameConfig.CoinMap;
 		tmpSeesawMap		= PlayRunningGameConfig.SeesawMap;
 		tmpGiganticItemMap	= PlayRunningGameConfig.GiganticItemMap;
+		tmpEnemyItemMap		= PlayRunningGameConfig.EnemyItemMap;
 
 		// ループさせる.
 		while ( tmpNum >= tmpFlooerMap.Length ) {
@@ -60,6 +62,10 @@ public class FloorMapManager : MonoBehaviour {
 		if ( tmpGiganticItemMap[ tmpNum ].ToString( ) != "0" ) {
 			float LocalPosY	= Convert.ToInt32( tmpGiganticItemMap[ tmpNum ].ToString() ) * PlayRunningGameConfig.CoefLocalPos;
 			PrefabPoolManager.Instance.instantiatePrefab( "GiganticItem", new Vector2( (float)( num + PlayRunningGameConfig.AdevancedPlayerPosX ), LocalPosY ), Quaternion.identity );
+		}
+
+		if ( tmpEnemyItemMap[ tmpNum ]. ToString( ) != "0" ) {
+			PrefabPoolManager.Instance.instantiatePrefab( "Enemy", new Vector2( (float)( num + PlayRunningGameConfig.AdevancedPlayerPosX ), 0f ), Quaternion.identity );
 		}
 	}
 

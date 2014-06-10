@@ -226,7 +226,7 @@ namespace PlayRunningGame.Player {
 		/// 空中ジャンプ時の演出.
 		///  ジャンプ音再生.
 		/// </summary>
-		private void ExecuteJump( ) {
+		public void ExecuteJump( ) {
 			// プレイヤージャンプ処理.
 			Jump( JumpForce );
 		}
@@ -269,6 +269,13 @@ namespace PlayRunningGame.Player {
 		/// <param name="coll">Coll.</param>
 		private void OnCollisionEnter2D( Collision2D coll ) {
 
+			if ( coll.gameObject.CompareTag( "EnemyHeader" )  ) {
+				Jump( JumpForce );
+			}
+			if ( coll.gameObject.CompareTag( "EnemyFooter" )  ) {
+				Jump( -JumpForce );
+			}
+
 			// 敵と衝突.
 			if ( coll.gameObject.CompareTag( "KillPlayer" )  ) {
 				IsDead	= true;
@@ -285,6 +292,16 @@ namespace PlayRunningGame.Player {
 		/// </summary>
 		/// <param name="coll">Coll.</param>
 		private void OnTriggerEnter2D( Collider2D coll ) {
+
+
+			if ( coll.gameObject.CompareTag( "EnemyHeader" )  ) {
+				Debug.Log ( "EnemyHeader" );
+				Jump( JumpForce );
+			}
+			if ( coll.gameObject.CompareTag( "EnemyFooter" )  ) {
+				Debug.Log ( "EnemyFooter" );
+				Jump( -JumpForce );
+			}
 
 			// 敵と衝突.
 			if ( coll.gameObject.CompareTag( "KillPlayer" )  ) {
