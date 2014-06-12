@@ -65,7 +65,7 @@ public class FloorMapManager : MonoBehaviour {
 		}
 
 		if ( tmpEnemyItemMap[ tmpNum ]. ToString( ) != "0" ) {
-			PrefabPoolManager.Instance.instantiatePrefab( "Enemy", new Vector2( (float)( num + PlayRunningGameConfig.AdevancedPlayerPosX ), 0f ), Quaternion.identity );
+			PrefabPoolManager.Instance.instantiatePrefab( "Enemy", new Vector2( (float)( num + PlayRunningGameConfig.AdevancedPlayerPosX ), 2f ), Quaternion.identity );
 		}
 	}
 

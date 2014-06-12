@@ -270,9 +270,11 @@ namespace PlayRunningGame.Player {
 		private void OnCollisionEnter2D( Collision2D coll ) {
 
 			if ( coll.gameObject.CompareTag( "EnemyHeader" )  ) {
+				Debug.Log ( "OnCollisionEnter2D:EnemyHeader" );
 				Jump( JumpForce );
 			}
 			if ( coll.gameObject.CompareTag( "EnemyFooter" )  ) {
+				Debug.Log ( "OnCollisionEnter2D:EnemyHeader" );
 				Jump( -JumpForce );
 			}
 
@@ -293,13 +295,12 @@ namespace PlayRunningGame.Player {
 		/// <param name="coll">Coll.</param>
 		private void OnTriggerEnter2D( Collider2D coll ) {
 
-
 			if ( coll.gameObject.CompareTag( "EnemyHeader" )  ) {
-				Debug.Log ( "EnemyHeader" );
+				Debug.Log ( "OnTriggerEnter2D:EnemyHeader" );
 				Jump( JumpForce );
 			}
 			if ( coll.gameObject.CompareTag( "EnemyFooter" )  ) {
-				Debug.Log ( "EnemyFooter" );
+				Debug.Log ( "OnTriggerEnter2D:EnemyFooter" );
 				Jump( -JumpForce );
 			}
 
