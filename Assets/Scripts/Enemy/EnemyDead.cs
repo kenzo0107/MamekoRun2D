@@ -12,9 +12,9 @@ public class EnemyDead : MonoBehaviour {
 	/// <param name="coll">Coll.</param>
 	private void OnTriggerEnter2D( Collider2D coll ) {
 
-		if ( coll.gameObject.tag.Contains( "Player" ) ) {
+		if ( coll.gameObject.CompareTag( "Player" ) ) {
 
-			Debug.Log ( "OnTriggerEnter2D  coll.gameObject.tag:" + coll.gameObject.tag );
+			Debug.Log ( "this.gameobject.name:" + this.gameObject.name +" | OnTriggerEnter2D  coll.gameObject.tag:" + coll.gameObject.tag );
 
 			// 敵キャラ倒されたSE再生.
 			AudioManager.Instance.PlaySE( AudioConfig.EnemyDie );
@@ -33,7 +33,7 @@ public class EnemyDead : MonoBehaviour {
 	/// <param name="coll">Coll.</param>
 	private void OnCollisionEnter2D( Collision2D coll ) {
 		
-		if ( coll.gameObject.tag.Contains( "Player" ) ) {
+		if ( coll.gameObject.CompareTag( "Player" ) ) {
 
 			Debug.Log ( "OnCollisionEnter2D  coll.gameObject.tag:" + coll.gameObject.tag );
 

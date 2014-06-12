@@ -6,7 +6,7 @@ namespace PlayRunningGame {
 	public static class PlayRunningGameConfig {
 
 		/// <summary>プレイヤーの巨大化期間.</summary>
-		public static readonly float	PlayerGiganticTerm	= 10f;
+		public static readonly float	PlayerGiganticTerm	= 5f;
 		/// <summary>プレイヤーの巨大化比率.</summary>
 		public static readonly float	PlayerGiganticRate	= 2f;
 		/// <summary>プレイヤー点滅時の間隔.</summary>
@@ -30,7 +30,7 @@ namespace PlayRunningGame {
 		public static readonly string CoinMap			= "1111100043200000000011111123432000000000111111234320000000001111112343200000000";
 		public static readonly string SeesawMap			= "0000001000000000000000000000000000000000000000000000000000000000000000000000000";
 		public static readonly string GiganticItemMap	= "0000004000000000000000000000000000000000000000000000000000000000000000000000000";
-		public static readonly string EnemyItemMap		= "0010000000000000000000000000000000000000000000000000000000000000000000000000000";
+		public static readonly string EnemyItemMap		= "0030000000000100000000000000000000000000000000000000000000000000000000000000000";
 
 		/// <summary>Feverフロアマップ.</summary>
 		public static readonly  string	FloorMapForFever	= "11111111111111111111111111111111";

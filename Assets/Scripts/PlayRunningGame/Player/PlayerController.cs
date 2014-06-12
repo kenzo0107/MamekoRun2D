@@ -21,7 +21,9 @@ namespace PlayRunningGame.Player {
 
 		#region private members.
 		/// <summary>ゲームマネージャーobj.</summary>
-		private GameObject	gameManager;
+		private GameObject	objGameManager;
+		/// <summary>ゲームマネージャーComponent.</summary>
+		private GameManager gameManager;
 		/// <summary>走るときの砂埃obj.</summary>
 		private GameObject	dustStorm;
 		/// <summary>バリアobj.</summary>
@@ -105,7 +107,8 @@ namespace PlayRunningGame.Player {
 			AddSpeedRight	= 0.0f;
 
 			// Setting up references.
-			gameManager		= GameObject.Find ( "/_GameManager" );
+			objGameManager	= GameObject.Find ( "/_GameManager" );
+			gameManager		= objGameManager.GetComponent<GameManager>();
 
 			groundCheck = transform.FindChild( "groundCheck" );
 			dustStorm	= transform.FindChild( "Dust Storm" ).gameObject;
@@ -210,7 +213,7 @@ namespace PlayRunningGame.Player {
 				// プレイヤーがDead状態になったときにmp3再生.
 				AudioManager.Instance.PlaySE( AudioConfig.SePlayerDie );
 				//  GameManagerにプレイヤーがDead状態であることを伝える.
-				gameManager.SendMessage( "SetPlayerDie" );
+				objGameManager.SendMessage( "SetPlayerDie" );
 				// プレイヤーGameObject破棄.
 				Destroy ( this.gameObject );
 			}
@@ -278,9 +281,11 @@ namespace PlayRunningGame.Player {
 				Jump( -JumpForce );
 			}
 
-			// 敵と衝突.
-			if ( coll.gameObject.CompareTag( "KillPlayer" )  ) {
-				IsDead	= true;
+			if ( false == gameManager.IsPlayerGigantic ) {
+				// 敵と衝突.
+				if ( coll.gameObject.CompareTag( "KillPlayer" )  ) {
+					IsDead	= true;
+				}
 			}
 
 			// シーソーと衝突.
@@ -304,9 +309,11 @@ namespace PlayRunningGame.Player {
 				Jump( -JumpForce );
 			}
 
-			// 敵と衝突.
-			if ( coll.gameObject.CompareTag( "KillPlayer" )  ) {
-				IsDead	= true;
+			if ( false == gameManager.IsPlayerGigantic ) {
+				// 敵と衝突.
+				if ( coll.gameObject.CompareTag( "KillPlayer" )  ) {
+					IsDead	= true;
+				}
 			}
 		}
 
