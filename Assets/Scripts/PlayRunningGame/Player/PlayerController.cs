@@ -12,7 +12,7 @@ namespace PlayRunningGame.Player {
 		#region public members.
 		public float		SpeedRight { get; set; }
 		public float		AddSpeedRight { get; set; }
-		public float		JumpForce;
+		public float		JumpForce		= PlayerConfig.DefaultJumpForce;
 		public bool			IsController	= false;
 		public bool			IsDead			= false;
 		public bool			IsJumpEnabaled	= false;
@@ -229,7 +229,7 @@ namespace PlayRunningGame.Player {
 		/// 空中ジャンプ時の演出.
 		///  ジャンプ音再生.
 		/// </summary>
-		public void ExecuteJump( ) {
+		private void ExecuteJump( ) {
 			// プレイヤージャンプ処理.
 			Jump( JumpForce );
 		}
@@ -237,7 +237,7 @@ namespace PlayRunningGame.Player {
 		/// <summary>
 		/// プレイヤージャンプ処理.
 		/// </summary>
-		private void Jump( float jumpforce ) {
+		public void Jump( float jumpforce ) {
 			// アニメーション - ジャンプ.
 			animStatus	= AnimationStatusList.JumpUp;
 			
@@ -272,25 +272,36 @@ namespace PlayRunningGame.Player {
 		/// <param name="coll">Coll.</param>
 		private void OnCollisionEnter2D( Collision2D coll ) {
 
-			if ( coll.gameObject.CompareTag( "EnemyHeader" )  ) {
-				Debug.Log ( "OnCollisionEnter2D:EnemyHeader" );
-				Jump( JumpForce );
-			}
-			if ( coll.gameObject.CompareTag( "EnemyFooter" )  ) {
-				Debug.Log ( "OnCollisionEnter2D:EnemyHeader" );
-				Jump( -JumpForce );
-			}
-
-			if ( false == gameManager.IsPlayerGigantic ) {
-				// 敵と衝突.
-				if ( coll.gameObject.CompareTag( "KillPlayer" )  ) {
-					IsDead	= true;
-				}
-			}
-
 			// シーソーと衝突.
 			if ( coll.gameObject.CompareTag( "Seesaw" ) ) {
 				OnSeesaw( );
+			}
+
+			// 敵と衝突.
+			if ( coll.gameObject.CompareTag( "KillPlayer" )  ) {
+				// プレイヤー巨大化状態でない場合.
+				if ( false == gameManager.IsPlayerGigantic ) {
+					// プレイヤーデッド.
+					IsDead	= true;
+				}
+				// プレイヤー巨大化状態の場合.
+				else {
+					Debug.Log ( "Player.OnCollisionEnter2D:KillPlayer" );
+					// 敵を消滅させる.
+					coll.gameObject.SendMessage( "DestroyObj" );
+					return;
+				}
+			}
+
+			if ( coll.gameObject.CompareTag( "EnemyHeader" ) ) {
+				Debug.Log ( "Player.OnCollisionEnter2D:EnemyHeader" );
+				coll.gameObject.SendMessage( "DestroyObj" );
+				Jump( JumpForce );
+			}
+			else if ( coll.gameObject.CompareTag( "EnemyFooter" )  ) {
+				Debug.Log ( "Player.OnCollisionEnter2D:EnemyFooter" );
+				coll.gameObject.SendMessage( "DestroyObj" );
+				Jump( -JumpForce );
 			}
 		}
 		
@@ -302,10 +313,12 @@ namespace PlayRunningGame.Player {
 
 			if ( coll.gameObject.CompareTag( "EnemyHeader" )  ) {
 				Debug.Log ( "OnTriggerEnter2D:EnemyHeader" );
+				coll.gameObject.SendMessage( "DestroyObj" );
 				Jump( JumpForce );
 			}
 			if ( coll.gameObject.CompareTag( "EnemyFooter" )  ) {
 				Debug.Log ( "OnTriggerEnter2D:EnemyFooter" );
+				coll.gameObject.SendMessage( "DestroyObj" );
 				Jump( -JumpForce );
 			}
 

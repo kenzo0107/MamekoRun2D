@@ -6,7 +6,7 @@ namespace PlayRunningGame {
 	public static class PlayRunningGameConfig {
 
 		/// <summary>プレイヤーの巨大化期間.</summary>
-		public static readonly float	PlayerGiganticTerm	= 5f;
+		public static readonly float	PlayerGiganticTerm	= 8f;
 		/// <summary>プレイヤーの巨大化比率.</summary>
 		public static readonly float	PlayerGiganticRate	= 2f;
 		/// <summary>プレイヤー点滅時の間隔.</summary>
@@ -17,7 +17,7 @@ namespace PlayRunningGame {
 		public static readonly float	PlayerGiganticEffectRemainTime	= 1f;
 
 		/// <summary>フィーバー用最大ゲージ.</summary>
-		public static readonly int		MaxGaugeForFever	= 100;
+		public static readonly int		MaxGaugeForFever	= 400;
 		/// <summary>フロアのローカルポジションY軸.</summary>
 		public static readonly float	FloorLocalPosY		= -1f;
 		/// <summary>プレイヤーのX軸方向にフロアを生成する距離.</summary>

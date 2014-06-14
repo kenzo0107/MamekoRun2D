@@ -4,6 +4,8 @@
 	/// Player config.
 	/// </summary>
 	public static class PlayerConfig {
+		/// <summery> デフォルトジャンプ力.</summery>
+		public static readonly float DefaultJumpForce	= 7f;
 		/// <summery> デフォルトスピード.</summery>
 		public static readonly float DefaultSpeedRight	= 0.1f;
 		/// <summery>所定位置より-x方向に位置する場合のプレイヤー加速スピード.</summery>

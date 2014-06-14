@@ -8,6 +8,10 @@ namespace PlayRunningGame.Menu {
 	public class Score : MonoBehaviour {
 
 		#region public members.
+		/// <summary>メニューobj.</summary>
+		private GameObject	objMenu;
+		/// <summary>矢印obj.</summary>
+		private GameObject	objArrow;
 		/// <summary>現在スコア</summary>
 		private int currentCoinScore	= 0;
 		/// <summary>フィーバー用ゲージ</summary>
@@ -25,8 +29,15 @@ namespace PlayRunningGame.Menu {
 		/// </summary>
 		private void Awake( ) {
 			gameManager	= this.GetComponent<GameManager>();
-			uiLabelCoinScore		= GameObject.FindGameObjectWithTag( "CoinScore" ).GetComponent<UILabel>();
-			uiLabelGaugeForFever	= GameObject.FindGameObjectWithTag( "GaugeForFever" ).GetComponent<UILabel>();
+			objMenu	= GameObject.Find ( "Anchor/Menu" );
+
+			Transform transformMenu = objMenu.transform;
+			GameObject feverBar	= transformMenu.FindChild( "FeverBar" ).gameObject;
+			Transform transformFeverBar	= feverBar.transform;
+			
+			uiLabelCoinScore		= transformMenu.FindChild( "CoinScore" ).GetComponent<UILabel>();
+			uiLabelGaugeForFever	= transformFeverBar.FindChild( "GaugeForFever" ).GetComponent<UILabel>();
+			objArrow				= transformFeverBar.FindChild( "Arrow" ).gameObject;
 		}
 
 		/// <summary>
@@ -47,7 +58,6 @@ namespace PlayRunningGame.Menu {
 
 					currentGaugeForFever	-= PlayRunningGameConfig.MaxGaugeForFever;
 				}
-
 				// フィーバー用ゲージアップ.
 				SetGuargeForFeverFormat( currentGaugeForFever );
 			}
@@ -73,6 +83,9 @@ namespace PlayRunningGame.Menu {
 
 			int rate	= (int)( 100 * gauge / PlayRunningGameConfig.MaxGaugeForFever );
 			uiLabelGaugeForFever.text	= string.Format( "{0}%", rate );
+
+			// メーターUp.
+			objArrow.SendMessage( "MaterUp", rate );
 		}
 	}
 }
