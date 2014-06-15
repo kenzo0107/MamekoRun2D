@@ -24,6 +24,8 @@ namespace PlayRunningGame.Player {
 		private GameObject	objGameManager;
 		/// <summary>ゲームマネージャーComponent.</summary>
 		private GameManager gameManager;
+		/// <summary>ゲームマネージャーComponent.</summary>
+		private MoveObject	moveObjectHandler;
 		/// <summary>走るときの砂埃obj.</summary>
 		private GameObject	dustStorm;
 		/// <summary>バリアobj.</summary>
@@ -73,13 +75,6 @@ namespace PlayRunningGame.Player {
 		}
 
 		/// <summary>
-		/// Sets the gigantic.
-		/// </summary>
-		public void SetLocalSclae( float rate ) {
-			transform.localScale = defaultPlayerLocalScale * rate;
-		}
-
-		/// <summary>
 		/// Sets the blink.
 		/// </summary>
 		public void SetBlink( ) {
@@ -92,19 +87,35 @@ namespace PlayRunningGame.Player {
 		}
 
 		/// <summary>
-		/// Sets the render enabled.
+		/// Sets the gigantic.
 		/// </summary>
-		/// <param name="isEnabled">If set to <c>true</c> is enabled.</param>
-		public void SetRenderEnabled( bool isEnabled ) {
-			BoneAnimation.renderer.enabled	= isEnabled;
-		}
+		public void SetGigantic( bool isActive ) {
+			// 巨大化.
+			if ( true == isActive ) {
+				// プレイヤー巨大化終了SE.
+				AudioManager.Instance.PlaySE( AudioConfig.SePlayerGianticOn );
+				// 頭の上に葉っぱをつける.
+				SetHeadLeafOnPlayer( true );
+				// 巨大化エフェクト.
+				SetEffect( EffectConfig.PlayerGianticEffect );
 
-		/// <summary>
-		/// 頭の葉っぱActive化.
-		/// </summary>
-		/// <param name="isActive">If set to <c>true</c> is active.</param>
-		public void SetHeadLeafOnPlayer( bool isActive ) {
-			objHeadLeaf.SetActive( isActive );
+				moveObjectHandler.SetScale( defaultPlayerLocalScale, defaultPlayerLocalScale * PlayRunningGameConfig.PlayerGiganticRate, 1f );
+				moveObjectHandler.IsStart	= true;
+			}
+			// 元のサイズに戻る.
+			else {
+				// プレイヤー巨大化終了SE.
+				AudioManager.Instance.PlaySE( AudioConfig.SePlayerGianticOut );
+				// 頭の上に葉っぱを非活性.
+				SetHeadLeafOnPlayer( false );
+
+				moveObjectHandler.SetScale( defaultPlayerLocalScale * PlayRunningGameConfig.PlayerGiganticRate, defaultPlayerLocalScale, 0.05f );
+				moveObjectHandler.IsStart	= true;
+
+				SetRenderEnabled( true );
+				// プレイヤー巨大化終了エフェクト.
+				SetEffect( EffectConfig.PlayerGianticOutEffect );
+			}
 		}
 
 		/// <summary>
@@ -134,6 +145,8 @@ namespace PlayRunningGame.Player {
 
 			// animation 初期値.
 			animStatus	= AnimationStatusList.Run;
+
+			moveObjectHandler	= this.GetComponent<MoveObject>();
 		}
 
 		/// <summary>
@@ -368,6 +381,22 @@ namespace PlayRunningGame.Player {
 		/// </summary>
 		private void OnSeesaw( ) {
 			Jump( JumpForce * PlayRunningGameConfig.SeesawJumpForceRate );
+		}
+		
+		/// <summary>
+		/// 頭の葉っぱActive化.
+		/// </summary>
+		/// <param name="isActive">If set to <c>true</c> is active.</param>
+		private void SetHeadLeafOnPlayer( bool isActive ) {
+			objHeadLeaf.SetActive( isActive );
+		}
+
+		/// <summary>
+		/// Sets the render enabled.
+		/// </summary>
+		/// <param name="isEnabled">If set to <c>true</c> is enabled.</param>
+		private void SetRenderEnabled( bool isEnabled ) {
+			BoneAnimation.renderer.enabled	= isEnabled;
 		}
 	}
 }

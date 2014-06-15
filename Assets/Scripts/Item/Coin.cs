@@ -38,8 +38,6 @@ public class Coin : MonoBehaviour {
 
 				// 巨大化アイテム.
 				case ( "Gigantic" ):
-					// コイン取得音再生.
-					AudioSource.PlayClipAtPoint( CoinClips, transform.position );
 					// 点数加算.
 					gameManager.SendMessage( "addScore", Score );
 					// プレイヤー巨大化.

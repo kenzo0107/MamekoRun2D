@@ -36,7 +36,12 @@ public class FloorMapManager : MonoBehaviour {
 		for ( i = 0; i < PlayRunningGameConfig.StageMap.Length; i++ ) {
 			if ( PlayRunningGameConfig.StageMap[ i ][ tmpNum ] != 0 ) {
 				LocalPosYRate	= PlayRunningGameConfig.StageMap.Length - 1 - i;
-				PrefabPoolManager.Instance.instantiatePrefab( PlayRunningGameConfig.MapItemList[ PlayRunningGameConfig.StageMap[ i ][ tmpNum ] ], new Vector2( (float)( num + PlayRunningGameConfig.AdevancedPlayerPosX  ), PlayRunningGameConfig.FloorLocalPosY + 0.5f * LocalPosYRate ), Quaternion.identity );
+				PrefabPoolManager.Instance.instantiatePrefab( 
+					                                              PlayRunningGameConfig.MapItemList[ PlayRunningGameConfig.StageMap[ i ][ tmpNum ] ]
+																, new Vector2( (float)( num + PlayRunningGameConfig.AdevancedPlayerPosX  )
+					              								, PlayRunningGameConfig.FloorLocalPosY + 0.5f * LocalPosYRate )
+					                                            , Quaternion.identity
+				                                             );
 			}
 		}
 	}
@@ -46,29 +51,28 @@ public class FloorMapManager : MonoBehaviour {
 	/// </summary>
 	/// <param name="num">Number.</param>
 	public void InstantiateFloorFever( int num, int StartX ) {
-		
+
+		int LocalPosYRate;
 		int tmpNum;
-		string tmpFlooerMap;
-		string tmpCoinMap;
-		float coinLocalPosY;
 
 		// フロアマップのどのbitを利用するか.
 		tmpNum	= num - StartX;
 
-		tmpFlooerMap	= PlayRunningGameConfig.FloorMapForFever;
-		tmpCoinMap		= PlayRunningGameConfig.CoinMapForFever;
-
-		while ( tmpNum >= tmpFlooerMap.Length ) {
-			tmpNum	-= tmpFlooerMap.Length;
+		while ( tmpNum >= PlayRunningGameConfig.StageMapFever[0].Length ) {
+			tmpNum	-= PlayRunningGameConfig.StageMapFever[0].Length;
 		}
 
-		if ( tmpFlooerMap[ tmpNum ].ToString() != "0" ) {
-			PrefabPoolManager.Instance.instantiatePrefab( "Block", new Vector2( (float)( num + PlayRunningGameConfig.AdevancedPlayerPosX ), PlayRunningGameConfig.FloorLocalPosY ), Quaternion.identity );
-		}
-
-		if ( tmpCoinMap[ tmpNum ].ToString() != "0" ) {
-			coinLocalPosY	= Convert.ToInt32( tmpCoinMap[ tmpNum ].ToString() ) * PlayRunningGameConfig.CoefLocalPos;
-			PrefabPoolManager.Instance.instantiatePrefab( "Coin", new Vector2( (float)( num + PlayRunningGameConfig.AdevancedPlayerPosX ), coinLocalPosY ), Quaternion.identity );
+		int i;
+		for ( i = 0; i < PlayRunningGameConfig.StageMapFever.Length; i++ ) {
+			if ( PlayRunningGameConfig.StageMapFever[ i ][ tmpNum ] != 0 ) {
+				LocalPosYRate	= PlayRunningGameConfig.StageMapFever.Length - 1 - i;
+				PrefabPoolManager.Instance.instantiatePrefab( 
+																   PlayRunningGameConfig.MapItemList[ PlayRunningGameConfig.StageMapFever[ i ][ tmpNum ] ]
+													             , new Vector2( (float)( num + PlayRunningGameConfig.AdevancedPlayerPosX  )
+													             , PlayRunningGameConfig.FloorLocalPosY + 0.5f * LocalPosYRate )
+													             , Quaternion.identity
+				                                             );
+			}
 		}
 	}
 }

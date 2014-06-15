@@ -23,20 +23,22 @@ namespace Audio {
 
 		#region se.
 		/// <summary>SE プレイヤージャンプ.</summary>
-		public static readonly string SePlayerJump		= "se_jump";
+		public static readonly string SePlayerJump			= "se_jump";
 		/// <summary>SE プレイヤーデッド.</summary>
-		public static readonly string SePlayerDie		= "se_die";
+		public static readonly string SePlayerDie			= "se_die";
 		/// <summary>SE プレイヤースタミナアップ.</summary>
-		public static readonly string SePlayerStaminaUp	= "se_staminaup";
+		public static readonly string SePlayerStaminaUp		= "se_staminaup";
 		/// <summary>SE プレイヤーフィーバー.</summary>
-		public static readonly string SePlayerFever		= "se_fever";
+		public static readonly string SePlayerFever			= "se_fever";
 		/// <summary>SE プレイヤーフィーバー終了.</summary>
-		public static readonly string SePlayerFeverOut	= "se_fever_out";
+		public static readonly string SePlayerFeverOut		= "se_fever_out";
 
+		/// <summary>SE プレイヤー巨大化.</summary>
+		public static readonly string SePlayerGianticOn		= "se_doron";
 		/// <summary>SE プレイヤー巨大化終了.</summary>
-		public static readonly string SePlayerGianticOut	= "se_doron";
+		public static readonly string SePlayerGianticOut	= "se_gigantic_out";
 		/// <summary>SE 敵デッド.</summary>
-		public static readonly string EnemyDie			= "se_enemy_die";
+		public static readonly string EnemyDie				= "se_enemy_die";
 		#endregion se.
 	}
 }

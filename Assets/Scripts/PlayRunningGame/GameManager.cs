@@ -125,6 +125,7 @@ namespace PlayRunningGame {
 				if ( maxChasePlayerCameraLocalPositionX < Mathf.Floor( chasePlayerCameraPosition.x ) ) {
 					maxChasePlayerCameraLocalPositionX	= Mathf.Floor( chasePlayerCameraPosition.x );
 
+					// フィーバー状態の場合.
 					if ( true == isFever ) {
 						if ( feverStartPlayerPosX + PlayRunningGameConfig.FloorMapForFeverLength() <= maxChasePlayerCameraLocalPositionX ) {
 							SetFeverFinish();
@@ -219,24 +220,20 @@ namespace PlayRunningGame {
 		/// プレイヤー巨大化.
 		/// </summary>
 		private void SetPlayerGigantic( ) {
+
 			this.IsPlayerGigantic		= true;
-			playerController.SetHeadLeafOnPlayer( true );
+			// プレイヤー巨大化残り時間をセット.
 			playerGiganticRemainTime	= PlayRunningGameConfig.PlayerGiganticTerm;
-			playerController.SetLocalSclae( PlayRunningGameConfig.PlayerGiganticRate );
+			// プレイヤー巨大化.
+			playerController.SetGigantic( true );
 		}
 
-		
 		/// <summary>
-		/// プレイヤー巨大化.
+		/// プレイヤー巨大化終了.
 		/// </summary>
 		private void SetPlayerGiganticFinish( ) {
-			playerController.SetHeadLeafOnPlayer( false );
-			playerController.SetLocalSclae( 1f );
-			playerController.SetRenderEnabled( true );
-			// プレイヤー巨大化終了SE.
-			AudioManager.Instance.PlaySE( AudioConfig.SePlayerGianticOut );
-			// プレイヤー巨大化終了エフェクト.
-			playerController.SetEffect( EffectConfig.PlayerGianticOutEffect );
+			// プレイヤー巨大化.
+			playerController.SetGigantic( false );
 		}
 
 		/// <summary>
