@@ -33,6 +33,8 @@ namespace Audio {
 		/// <summary>SE プレイヤーフィーバー終了.</summary>
 		public static readonly string SePlayerFeverOut	= "se_fever_out";
 
+		/// <summary>SE プレイヤー巨大化終了.</summary>
+		public static readonly string SePlayerGianticOut	= "se_doron";
 		/// <summary>SE 敵デッド.</summary>
 		public static readonly string EnemyDie			= "se_enemy_die";
 		#endregion se.

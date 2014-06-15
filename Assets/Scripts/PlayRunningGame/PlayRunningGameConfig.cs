@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace PlayRunningGame {
 
@@ -19,7 +20,7 @@ namespace PlayRunningGame {
 		/// <summary>フィーバー用最大ゲージ.</summary>
 		public static readonly int		MaxGaugeForFever	= 400;
 		/// <summary>フロアのローカルポジションY軸.</summary>
-		public static readonly float	FloorLocalPosY		= -1f;
+		public static readonly float	FloorLocalPosY		= -1.5f;
 		/// <summary>プレイヤーのX軸方向にフロアを生成する距離.</summary>
 		public static readonly int		AdevancedPlayerPosX	= 10;
 		/// <summary>フロアのY軸ポジションの係数.</summary>
@@ -29,8 +30,42 @@ namespace PlayRunningGame {
 		public static readonly string FloorMap			= "1111111111111111111111111111111111111111111111111111111111111111111111111111111";
 		public static readonly string CoinMap			= "1111100043200000000011111123432000000000111111234320000000001111112343200000000";
 		public static readonly string SeesawMap			= "0000001000000000000000000000000000000000000000000000000000000000000000000000000";
-		public static readonly string GiganticItemMap	= "0000004000000000000000000000000000000000000000000000000000000000000000000000000";
+		public static readonly string GiganticItemMap	= "0000005000000000000000000000000000000000000000000000000000000000000000000000000";
 		public static readonly string EnemyItemMap		= "0030000000000100000000000000000000000000000000000000000000000000000000000000000";
+
+		public enum M {
+			 Block	= 1
+
+			,Coin
+			,GianticItem
+			,Seasaw
+
+			,EnemyTortoise
+			,EnemyToge
+		}
+
+		public static readonly IDictionary<int, string> MapItemList = new Dictionary<int, string>( ) {
+			{ (int)M.Block,			"Block" },
+
+			{ (int)M.Coin,			"Coin" },
+			{ (int)M.GianticItem,	"GianticItem" },
+			{ (int)M.Seasaw,		"Seasaw" },
+
+			{ (int)M.EnemyTortoise,	"Enemy" },
+			{ (int)M.EnemyToge,		"EnemyToge" },
+		};
+
+		public static readonly int[][] StageMap	= new int[7][] {
+			 new int[] {	0,	0,	0,	0,	0,	0,	2,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0 }
+			,new int[] {	0,	0,	0,	0,	0,	2,	0,	2,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0 }
+			,new int[] {	0,	0,	0,	0,	2,	0,	0,	0,	2,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0 }
+			,new int[] {	0,	0,	0,	2,	0,	0,	0,	0,	0,	2,	0,	0,	0,	0,	0,	0,	0,	0,	0 }
+			,new int[] {	0,	0,	2,	0,	0,	0,	0,	0,	0,	0,	2,	0,	0,	0,	0,	0,	0,	0,	0 }
+			,new int[] {	0,	2,	0,	0,	0,	0,	0,	0,	0,	0,	0,	2,	0,	0,	0,	0,	0,	0,	0 }
+			,new int[] {	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1 }
+		};
+
+
 
 		/// <summary>Feverフロアマップ.</summary>
 		public static readonly  string	FloorMapForFever	= "11111111111111111111111111111111";

@@ -32,6 +32,8 @@ namespace PlayRunningGame.Player {
 		private Transform	transformBarrier;
 		/// <summary>デフォルトプレイヤー  LocalScale.</summary>
 		private Vector2		defaultPlayerLocalScale;
+		/// <summary>頭の葉っぱobj.</summary>
+		private GameObject	objHeadLeaf;
 
 		private GameObject	BoneAnimation;
 		private Transform	groundCheck;				// A position marking where to check if the player is grounded.
@@ -98,6 +100,14 @@ namespace PlayRunningGame.Player {
 		}
 
 		/// <summary>
+		/// 頭の葉っぱActive化.
+		/// </summary>
+		/// <param name="isActive">If set to <c>true</c> is active.</param>
+		public void SetHeadLeafOnPlayer( bool isActive ) {
+			objHeadLeaf.SetActive( isActive );
+		}
+
+		/// <summary>
 		/// Awake this instance.
 		/// </summary>
 		private void Awake( ) {
@@ -119,6 +129,8 @@ namespace PlayRunningGame.Player {
 
 			BoneAnimation	= transform.FindChild( "BoneAnimation" ).gameObject;
 			anim			= BoneAnimation.GetComponent<Animation>();
+
+			objHeadLeaf		= transform.FindChild( "BoneAnimation/Root/Total/Body/Head/Leaf" ).gameObject;
 
 			// animation 初期値.
 			animStatus	= AnimationStatusList.Run;

@@ -6,7 +6,7 @@ using System.Collections;
 using PlayRunningGame;
 
 public class FloorMapManager : MonoBehaviour {
-	
+
 	/// <summary>
 	/// Start this instance.
 	/// </summary>
@@ -23,50 +23,21 @@ public class FloorMapManager : MonoBehaviour {
 	/// <param name="num">Number.</param>
 	public void InstantiateFloor( int num ) {
 
+		int LocalPosYRate;
 		int tmpNum;
-		string tmpFlooerMap;
-		string tmpCoinMap;
-		string tmpSeesawMap;
-		string tmpGiganticItemMap;
-		string tmpEnemyItemMap;
-		float coinLocalPosY;
-
 		tmpNum				= num;
-		tmpFlooerMap		= PlayRunningGameConfig.FloorMap;
-		tmpCoinMap			= PlayRunningGameConfig.CoinMap;
-		tmpSeesawMap		= PlayRunningGameConfig.SeesawMap;
-		tmpGiganticItemMap	= PlayRunningGameConfig.GiganticItemMap;
-		tmpEnemyItemMap		= PlayRunningGameConfig.EnemyItemMap;
 
 		// ループさせる.
-		while ( tmpNum >= tmpFlooerMap.Length ) {
-			tmpNum	-= tmpFlooerMap.Length;
+		while ( tmpNum >= PlayRunningGameConfig.StageMap[0].Length ) {
+			tmpNum	-= PlayRunningGameConfig.StageMap[0].Length;
 		}
 
-//		Debug.Log ( "floorMap[ tmpNum ]:" + floorMap[ tmpNum ] );
-		if ( tmpFlooerMap[ tmpNum ].ToString() != "0" ) {
-			PrefabPoolManager.Instance.instantiatePrefab( "Block", new Vector2( (float)( num + PlayRunningGameConfig.AdevancedPlayerPosX ), PlayRunningGameConfig.FloorLocalPosY ), Quaternion.identity );
-		}
-
-//		Debug.Log ( "coinMap[ tmpNum ].ToString():" + coinMap[ tmpNum ].ToString() );
-		if ( tmpCoinMap[ tmpNum ].ToString() != "0" ) {
-			coinLocalPosY	= Convert.ToInt32( tmpCoinMap[ tmpNum ].ToString() ) * PlayRunningGameConfig.CoefLocalPos;
-//			Debug.Log ( String.Format( "coinLocalPosY:{0}", coinLocalPosY ) );
-			PrefabPoolManager.Instance.instantiatePrefab( "Coin", new Vector2( (float)( num + PlayRunningGameConfig.AdevancedPlayerPosX ), coinLocalPosY ), Quaternion.identity );
-		}
-
-		if ( tmpSeesawMap[ tmpNum ].ToString() != "0" ) {
-			PrefabPoolManager.Instance.instantiatePrefab( "Seesaw", new Vector2( (float)( num + PlayRunningGameConfig.AdevancedPlayerPosX ), 0f ), Quaternion.identity );
-		}
-
-		if ( tmpGiganticItemMap[ tmpNum ].ToString( ) != "0" ) {
-			float LocalPosY	= Convert.ToInt32( tmpGiganticItemMap[ tmpNum ].ToString() ) * PlayRunningGameConfig.CoefLocalPos;
-			PrefabPoolManager.Instance.instantiatePrefab( "GiganticItem", new Vector2( (float)( num + PlayRunningGameConfig.AdevancedPlayerPosX ), LocalPosY ), Quaternion.identity );
-		}
-
-		if ( tmpEnemyItemMap[ tmpNum ]. ToString( ) != "0" ) {
-			float EnemyLocalPosY	= Convert.ToInt32( tmpEnemyItemMap[ tmpNum ].ToString() ) * PlayRunningGameConfig.CoefLocalPos;
-			PrefabPoolManager.Instance.instantiatePrefab( "Enemy", new Vector2( (float)( num + PlayRunningGameConfig.AdevancedPlayerPosX ), EnemyLocalPosY ), Quaternion.identity );
+		int i;
+		for ( i = 0; i < PlayRunningGameConfig.StageMap.Length; i++ ) {
+			if ( PlayRunningGameConfig.StageMap[ i ][ tmpNum ] != 0 ) {
+				LocalPosYRate	= PlayRunningGameConfig.StageMap.Length - 1 - i;
+				PrefabPoolManager.Instance.instantiatePrefab( PlayRunningGameConfig.MapItemList[ PlayRunningGameConfig.StageMap[ i ][ tmpNum ] ], new Vector2( (float)( num + PlayRunningGameConfig.AdevancedPlayerPosX  ), PlayRunningGameConfig.FloorLocalPosY + 0.5f * LocalPosYRate ), Quaternion.identity );
+			}
 		}
 	}
 
