@@ -12,8 +12,10 @@ public class FloorMapManager : MonoBehaviour {
 	/// </summary>
 	private void Start( ) {
 		int i;
-		for ( i = 0; i <= 20; i++ ) {
-			PrefabPoolManager.Instance.instantiatePrefab( "Block", new Vector2( (float)( i - PlayRunningGameConfig.AdevancedPlayerPosX ), PlayRunningGameConfig.FloorLocalPosY ), Quaternion.identity );
+		int mapId;
+		for ( i = 0; i <= PlayRunningGameConfig.DefaultInstantFloorCount; i++ ) {
+			mapId	= PlayRunningGameConfig.StartStageMap[ i ];
+			PrefabPoolManager.Instance.instantiatePrefab( PlayRunningGameConfig.MapItemList[ mapId ], new Vector2( (float)( i - PlayRunningGameConfig.AdevancedPlayerPosX ), PlayRunningGameConfig.FloorLocalPosY ), Quaternion.identity );
 		}
 	}
 
@@ -39,7 +41,7 @@ public class FloorMapManager : MonoBehaviour {
 				PrefabPoolManager.Instance.instantiatePrefab( 
 					                                              PlayRunningGameConfig.MapItemList[ PlayRunningGameConfig.StageMap[ i ][ tmpNum ] ]
 																, new Vector2( (float)( num + PlayRunningGameConfig.AdevancedPlayerPosX  )
-					              								, PlayRunningGameConfig.FloorLocalPosY + 0.5f * LocalPosYRate )
+					              								, PlayRunningGameConfig.FloorLocalPosY + 0.7f * LocalPosYRate )
 					                                            , Quaternion.identity
 				                                             );
 			}

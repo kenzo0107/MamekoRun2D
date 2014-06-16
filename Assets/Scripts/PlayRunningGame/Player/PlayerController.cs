@@ -82,7 +82,7 @@ namespace PlayRunningGame.Player {
 			
 			if( blinkIntervalTime >= PlayRunningGameConfig.PlayerBlinkInterval ) {
 				blinkIntervalTime = 0f;
-				BoneAnimation.renderer.enabled	= !BoneAnimation.renderer.enabled;
+				if ( BoneAnimation )	BoneAnimation.renderer.enabled	= !BoneAnimation.renderer.enabled;
 			} 
 		}
 
@@ -302,6 +302,12 @@ namespace PlayRunningGame.Player {
 				OnSeesaw( );
 			}
 
+			if ( coll.gameObject.CompareTag( "DeadLine" ) ) {
+				Debug.Log ( "Player.OnCollisionEnter2D:DeadLine" );
+				// プレイヤーデッド.
+				IsDead	= true;
+			}
+
 			// 敵と衝突.
 			if ( coll.gameObject.CompareTag( "KillPlayer" )  ) {
 				// プレイヤー巨大化状態でない場合.
@@ -345,6 +351,12 @@ namespace PlayRunningGame.Player {
 				Debug.Log ( "OnTriggerEnter2D:EnemyFooter" );
 				coll.gameObject.SendMessage( "DestroyObj" );
 				Jump( -JumpForce );
+			}
+
+			if ( coll.gameObject.CompareTag( "DeadLine" ) ) {
+				Debug.Log ( "Player.OnCollisionEnter2D:DeadLine" );
+				// プレイヤーデッド.
+				IsDead	= true;
 			}
 
 			if ( false == gameManager.IsPlayerGigantic ) {

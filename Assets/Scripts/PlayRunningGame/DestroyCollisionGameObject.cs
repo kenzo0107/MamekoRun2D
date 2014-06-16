@@ -10,7 +10,7 @@ public class DestroyCollisionGameObject : MonoBehaviour {
 	/// <param name="coll">Coll.</param>
 	private void OnTriggerEnter2D( Collider2D coll ) {
 
-		if ( coll.gameObject.name.Contains( "DeadLineY" ) ) {
+		if ( coll.gameObject.CompareTag( "DeadLine" ) ) {
 			Destroy( this.gameObject );
 		}
 	}

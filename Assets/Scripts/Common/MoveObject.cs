@@ -59,6 +59,7 @@ public class MoveObject : MonoBehaviour {
 	/// <param name="to">To.</param>
 	/// <param name="time">所要時間.</param>
 	public void SetScale( Vector2 from, Vector2 to, float time ) {
+		timer		= 0f;
 		fromVector	= from;
 		toVector	= to;
 		runTime		= time;

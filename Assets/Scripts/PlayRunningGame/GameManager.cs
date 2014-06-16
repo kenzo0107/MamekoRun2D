@@ -96,6 +96,7 @@ namespace PlayRunningGame {
 		/// </summary>
 		private void FixedUpdate( ) {
 
+			if ( true  == playerController.IsDead ) return;
 			if ( false == isPlayerGigantic ) return;
 
 			playerGiganticRemainTime -= Time.deltaTime;

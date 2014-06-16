@@ -285,7 +285,13 @@ public class PrefabPoolManager : SingletonMonoBehaviour<PrefabPoolManager>{
 	//----------------------------　Release　--------------------------//
 	
 	public bool ReleasePrefab(GameObject prefab){
-		return ReleasePrefab(prefab.name,prefab);
+
+		if ( prefab ) {
+			return ReleasePrefab(prefab.name,prefab);
+		}
+		else {
+			return true;
+		}
 	}
 	
 	
