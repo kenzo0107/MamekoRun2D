@@ -71,7 +71,7 @@ public class FloorMapManager : MonoBehaviour {
 				PrefabPoolManager.Instance.instantiatePrefab( 
 																   PlayRunningGameConfig.MapItemList[ PlayRunningGameConfig.StageMapFever[ i ][ tmpNum ] ]
 													             , new Vector2( (float)( num + PlayRunningGameConfig.AdevancedPlayerPosX  )
-													             , PlayRunningGameConfig.FloorLocalPosY + 0.5f * LocalPosYRate )
+													             , PlayRunningGameConfig.FloorLocalPosY + 0.6f * LocalPosYRate )
 													             , Quaternion.identity
 				                                             );
 			}
