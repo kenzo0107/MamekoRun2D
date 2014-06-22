@@ -40,7 +40,7 @@ namespace PlayRunningGame {
 		private ChasePlayer			chasePlayer;
 		/// <summary>フィーバー背景.</summary>
 		private GameObject			bgFever;
-
+		/// <summary>プレイヤー追跡カメラLocalPosition.</summary>
 		private Vector3				chasePlayerCameraPosition;
 		/// <summary>距離スコアLabel.</summary>
 		private UILabel				uiLabelDistanceScore;

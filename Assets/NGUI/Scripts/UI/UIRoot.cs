@@ -47,21 +47,21 @@ public class UIRoot : MonoBehaviour
 	/// Height of the screen when 'automatic' is turned off.
 	/// </summary>
 
-	public int manualHeight = 720;
+	public int manualHeight = 480;
 
 	/// <summary>
 	/// If the screen height goes below this value, it will be as if the scaling style
 	/// is set to FixedSize with manualHeight of this value.
 	/// </summary>
 
-	public int minimumHeight = 320;
+	public int minimumHeight = 480;
 
 	/// <summary>
 	/// If the screen height goes above this value, it will be as if the scaling style
 	/// is set to FixedSize with manualHeight of this value.
 	/// </summary>
 
-	public int maximumHeight = 1536;
+	public int maximumHeight = 480;
 
 	/// <summary>
 	/// UI Root's active height, based on the size of the screen.

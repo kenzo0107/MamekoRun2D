@@ -24,6 +24,8 @@ namespace Audio {
 		#region se.
 		/// <summary>SE プレイヤージャンプ.</summary>
 		public static readonly string SePlayerJump			= "se_jump";
+		/// <summary>SE プレイヤージャンプ.</summary>
+		public static readonly string SePlayerJumpSeesaw	= "se_seesaw";
 		/// <summary>SE プレイヤーデッド.</summary>
 		public static readonly string SePlayerDie			= "se_die";
 		/// <summary>SE プレイヤースタミナアップ.</summary>

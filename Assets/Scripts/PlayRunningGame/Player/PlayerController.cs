@@ -12,10 +12,15 @@ namespace PlayRunningGame.Player {
 		#region public members.
 		public float		SpeedRight { get; set; }
 		public float		AddSpeedRight { get; set; }
+		/// <summary>ジャンプ力.</summary>
 		public float		JumpForce		= PlayerConfig.DefaultJumpForce;
+		/// <summary>操作可能か判定(true : 可能).</summary>
 		public bool			IsController	= false;
+		/// <summary>Dead状態か判定(true : Dead).</summary>
 		public bool			IsDead			= false;
+		/// <summary>ジャンプ可能か判定(true : 可能).</summary>
 		public bool			IsJumpEnabaled	= false;
+		/// <summary>ジャンプ可能最大数.</summary>
 		public int			JumpEnableCountMax	= 1;
 		#endregion
 
@@ -38,12 +43,19 @@ namespace PlayRunningGame.Player {
 		private GameObject	objHeadLeaf;
 
 		private GameObject	BoneAnimation;
-		private Transform	groundCheck;				// A position marking where to check if the player is grounded.
+		/// <summary>接地しているかチェックするTransform.</summary>
+		private Transform	groundCheck;
+		/// <summary>接地しているか判定(true : 接地).</summary>
 		private bool		isGrounded		= false;
+		/// <summary>空中ジャンプが可能か判定(true : 可能).</summary>
 		private bool		isDoubleJump	= false;
+		/// <summary>空中ジャンプが可能か判定(true : 可能).</summary>
 		private int			jumpEnableCount		= 0;
+		/// <summary>ジャンプ力格納用変数.</summary>
 		private float		jump;
+		/// <summary>アニメーション.</summary>
 		private Animation	anim;
+		/// <summary>アニメーター.</summary>
 		private Animator	animator;
 
 		private enum AnimationStatusList {
@@ -71,7 +83,9 @@ namespace PlayRunningGame.Player {
 		/// </summary>
 		/// <param name="isActive">If set to <c>true</c> is active.</param>
 		public void SetAura( bool isActive ) {
-			if ( barrier )	barrier.SetActive( isActive );
+			if ( barrier ) {
+				barrier.SetActive( isActive );
+			}
 		}
 
 		/// <summary>
@@ -82,7 +96,9 @@ namespace PlayRunningGame.Player {
 			
 			if( blinkIntervalTime >= PlayRunningGameConfig.PlayerBlinkInterval ) {
 				blinkIntervalTime = 0f;
-				if ( BoneAnimation )	BoneAnimation.renderer.enabled	= !BoneAnimation.renderer.enabled;
+				if ( BoneAnimation ) {
+					BoneAnimation.renderer.enabled	= !BoneAnimation.renderer.enabled;
+				}
 			} 
 		}
 
@@ -262,7 +278,7 @@ namespace PlayRunningGame.Player {
 		/// <summary>
 		/// プレイヤージャンプ処理.
 		/// </summary>
-		public void Jump( float jumpforce ) {
+		private void Jump( float jumpforce ) {
 			// アニメーション - ジャンプ.
 			animStatus	= AnimationStatusList.JumpUp;
 			
@@ -283,11 +299,28 @@ namespace PlayRunningGame.Player {
 		}
 
 		/// <summary>
+		/// Jump the specified jumpforce and seName.
+		/// </summary>
+		/// <param name="jumpforce">Jumpforce.</param>
+		/// <param name="seName">Se name.</param>
+		private void Jump( float jumpforce, string seName ) {
+			// アニメーション - ジャンプ.
+			animStatus	= AnimationStatusList.JumpUp;
+
+			// アニメーション設定.
+			SetAnimation( animStatus );
+			this.rigidbody2D.velocity = Vector3.up * jumpforce;
+			
+			//  ジャンプSE再生.
+			AudioManager.Instance.PlaySE( seName );
+			SetAnimation( animStatus );
+		}
+
+		/// <summary>
 		/// Animation設定.
 		/// </summary>
 		/// <param name="status">Status.</param>
 		private void SetAnimation( AnimationStatusList status ) {
-//			Debug.Log ( System.Convert.ToString ( status ) );
 			anim.Play ( System.Convert.ToString ( status ) );
 		}
 
@@ -359,10 +392,18 @@ namespace PlayRunningGame.Player {
 				IsDead	= true;
 			}
 
-			if ( false == gameManager.IsPlayerGigantic ) {
+
+			if ( coll.gameObject.CompareTag( "KillPlayer" )  ) {
 				// 敵と衝突.
-				if ( coll.gameObject.CompareTag( "KillPlayer" )  ) {
+				if ( false == gameManager.IsPlayerGigantic ) {
 					IsDead	= true;
+				}
+				// プレイヤー巨大化状態の場合.
+				else {
+					Debug.Log ( "Player.OnCollisionEnter2D:KillPlayer" );
+					// 敵を消滅させる.
+					coll.gameObject.SendMessage( "DestroyObj" );
+					return;
 				}
 			}
 		}
@@ -392,7 +433,7 @@ namespace PlayRunningGame.Player {
 		/// Raises the seesaw event.
 		/// </summary>
 		private void OnSeesaw( ) {
-			Jump( JumpForce * PlayRunningGameConfig.SeesawJumpForceRate );
+			Jump( JumpForce * PlayRunningGameConfig.SeesawJumpForceRate, AudioConfig.SePlayerJumpSeesaw );
 		}
 		
 		/// <summary>

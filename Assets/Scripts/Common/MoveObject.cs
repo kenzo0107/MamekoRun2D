@@ -64,6 +64,5 @@ public class MoveObject : MonoBehaviour {
 		toVector	= to;
 		runTime		= time;
 		scaleVectorRate	= ( toVector - fromVector ) / runTime;
-		Debug.Log( "scaleVectorRate=" + scaleVectorRate );
 	}
 }
