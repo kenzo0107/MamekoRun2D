@@ -52,7 +52,10 @@ namespace PlayRunningGame {
 		private float				maxChasePlayerCameraLocalPositionX;
 		/// <summary>フロアマップマネージャー.</summary>
 		private FloorMapManager				floorMapManager;
+		/// <summary>会話.</summary>
+		private GameObject			objComversation;
 
+		private Transform	AnchorTransform;
 		private Transform	playerTransform;
 		private Transform	chasePlayerCameraTransform;
 
@@ -75,6 +78,7 @@ namespace PlayRunningGame {
 		/// </summary>
 		private void Awake( ) {
 			Anchor						= GameObject.Find ( "Anchor" );
+			AnchorTransform				= Anchor.transform;
 			playerController			= PlayerObj.GetComponent<PlayerController>();
 			playerTransform				= PlayerObj.transform;
 			chasePlayer					= ChaserCamera.GetComponent<ChasePlayer>();
@@ -82,6 +86,7 @@ namespace PlayRunningGame {
 			uiLabelDistanceScore		= DistanceScore.GetComponent<UILabel>();
 			floorMapManager				= this.GetComponent<FloorMapManager>();
 			bgFever						= chasePlayerCameraTransform.FindChild( "BgFever" ).gameObject;
+			objComversation				= AnchorTransform.FindChild( "Comversation" ).gameObject;
 		}
 
 		/// <summary>
@@ -125,6 +130,10 @@ namespace PlayRunningGame {
 
 				if ( maxChasePlayerCameraLocalPositionX < Mathf.Floor( chasePlayerCameraPosition.x ) ) {
 					maxChasePlayerCameraLocalPositionX	= Mathf.Floor( chasePlayerCameraPosition.x );
+
+					if ( maxChasePlayerCameraLocalPositionX == 20 ) {
+						StartComversation( 20 );
+					}
 
 					// フィーバー状態の場合.
 					if ( true == isFever ) {
@@ -274,10 +283,21 @@ namespace PlayRunningGame {
 		/// <summary>
 		/// Retire this instance.
 		/// </summary>
-		void RetireGame( ) {
+		private void RetireGame( ) {
 			Destroy ( PlayerObj );
 			PlayerObj	= null;
 			this.SendMessage( "OnClickButton" );
+		}
+
+		/// <summary>
+		/// 会話スタート.
+		/// </summary>
+		private void StartComversation( int comversationId ) {
+			playerController.IsController	= false;
+			playerController.SpeedRight		= 0f;
+			chasePlayer.SpeedRight			= 0f;
+
+			objComversation.SetActive( true );
 		}
 
 		#region OnGUI

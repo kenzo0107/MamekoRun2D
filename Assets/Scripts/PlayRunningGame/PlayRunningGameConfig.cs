@@ -20,7 +20,7 @@ namespace PlayRunningGame {
 		/// <summary>フィーバー用最大ゲージ.</summary>
 		public static readonly int		MaxGaugeForFever	= 400;
 		/// <summary>フロアのローカルポジションY軸.</summary>
-		public static readonly float	FloorLocalPosY		= -1.5f;
+		public static readonly float	FloorLocalPosY		= -1f;
 		/// <summary>プレイヤーのX軸方向にフロアを生成する距離.</summary>
 		public static readonly int		AdevancedPlayerPosX	= 7;
 		/// <summary>開始位置から生成しなくてはならないフロア数.</summary>
