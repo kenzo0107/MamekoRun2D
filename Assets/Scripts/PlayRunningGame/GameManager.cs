@@ -53,7 +53,7 @@ namespace PlayRunningGame {
 		/// <summary>フロアマップマネージャー.</summary>
 		private FloorMapManager				floorMapManager;
 		/// <summary>会話.</summary>
-		private GameObject			objComversation;
+		private GameObject			objConversation;
 
 		private Transform	AnchorTransform;
 		private Transform	playerTransform;
@@ -86,7 +86,7 @@ namespace PlayRunningGame {
 			uiLabelDistanceScore		= DistanceScore.GetComponent<UILabel>();
 			floorMapManager				= this.GetComponent<FloorMapManager>();
 			bgFever						= chasePlayerCameraTransform.FindChild( "BgFever" ).gameObject;
-			objComversation				= AnchorTransform.FindChild( "Comversation" ).gameObject;
+			objConversation				= AnchorTransform.FindChild( "Conversation" ).gameObject;
 		}
 
 		/// <summary>
@@ -101,8 +101,21 @@ namespace PlayRunningGame {
 		/// </summary>
 		private void FixedUpdate( ) {
 
-			if ( true  == playerController.IsDead ) return;
-			if ( false == isPlayerGigantic ) return;
+			if ( true  == playerController.IsDead || false == isPlayerGigantic ) {
+				return;
+			}
+
+			if ( false == playerController.IsController ) {
+				if ( true == playerController.Anim.isPlaying ) {
+					playerController.SendMessage( "StopAnimation" );
+				}
+				return;
+			}
+			else {
+				if ( false == playerController.Anim.isPlaying ) {
+					playerController.Anim.Play();
+				}
+			}
 
 			playerGiganticRemainTime -= Time.deltaTime;
 
@@ -131,8 +144,8 @@ namespace PlayRunningGame {
 				if ( maxChasePlayerCameraLocalPositionX < Mathf.Floor( chasePlayerCameraPosition.x ) ) {
 					maxChasePlayerCameraLocalPositionX	= Mathf.Floor( chasePlayerCameraPosition.x );
 
-					if ( maxChasePlayerCameraLocalPositionX == 20 ) {
-						StartComversation( 20 );
+					if ( maxChasePlayerCameraLocalPositionX == 5 ) {
+						StartConversation( 5 );
 					}
 
 					// フィーバー状態の場合.
@@ -292,12 +305,15 @@ namespace PlayRunningGame {
 		/// <summary>
 		/// 会話スタート.
 		/// </summary>
-		private void StartComversation( int comversationId ) {
+		private void StartConversation( int comversationId ) {
+			Bg0.SendMessage( "BrakeScroll" );
+			playerController.Anim.Stop ();
 			playerController.IsController	= false;
 			playerController.SpeedRight		= 0f;
 			chasePlayer.SpeedRight			= 0f;
 
-			objComversation.SetActive( true );
+			objConversation.SetActive( true );
+			objConversation.SendMessage( "NextTalk" );
 		}
 
 		#region OnGUI

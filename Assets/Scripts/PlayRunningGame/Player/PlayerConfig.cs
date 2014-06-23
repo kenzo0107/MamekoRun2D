@@ -12,5 +12,12 @@
 		public static readonly float AddSpeedRight		= 0.01f;
 		/// <summery>カメラ位置からのプレイヤー位置.</summery>
 		public static readonly float PlayerPositionByCamera	= -3.5f;
+		/// <summery>アニメーションステータス一覧.</summery>
+		public enum AnimationStatusList {
+			Run,
+			JumpUp,
+			JumpRotate,
+			Sit
+		}
 	}
 }

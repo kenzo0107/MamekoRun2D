@@ -251,27 +251,57 @@ public class PrefabPoolManager : SingletonMonoBehaviour<PrefabPoolManager>{
 		familiy = prefabFamilies[prefabName];
 		
 		if(familiy.releasedAmount==0){
+			Debug.Log ( "prefabName=" + prefabName );
 			prefab=(GameObject)Instantiate(familiy.sourcePrefab, position, rotation);
 			prefab.name=prefabName;
 			familiy.Add(prefab);
 		}
 		else { 
-			//		//2.リリースしてあるのがあればそれを使う.
-			//		if(familiy.releasedAmount>0){
 			prefab = familiy.GetReleasedPrefab();
-			Transform transformPrefab	= prefab.transform;
-			transformPrefab.position	= position;
-			transformPrefab.rotation	= rotation;
-			transformPrefab.parent		= parentTransfom;
+			Transform transformPrefab		= prefab.transform;
+			transformPrefab.parent			= parentTransfom;
+			transformPrefab.localPosition	= position;
+			transformPrefab.localRotation	= rotation;
 			prefab.SetActive(true);
 
-			// TODO 
 			if ( prefab.GetComponent<ParticleSystem>() ) {
 				StartCoroutine( WaitingForRelease( prefab, prefab.GetComponent<ParticleSystem>().duration ) );
 			}
 		}
 	}
 
+	public void instantiatePrefab(string prefabPath, Vector3 position, Quaternion rotation, Transform parentTransfom, Vector3 scale ){
+		PrefabFamiliy familiy;
+		GameObject prefab;
+		string prefabName = GetPrefabName(prefabPath);
+		
+		if(!prefabFamilies.ContainsKey(prefabName)){
+			LoadPrefab(prefabName);
+		}
+		
+		//対象を一時変数に代入.
+		familiy = prefabFamilies[prefabName];
+		
+		if(familiy.releasedAmount==0){
+			Debug.Log ( "prefabName=" + prefabName );
+			prefab=(GameObject)Instantiate(familiy.sourcePrefab, position, rotation);
+			prefab.name=prefabName;
+			familiy.Add(prefab);
+		}
+		else { 
+			prefab = familiy.GetReleasedPrefab();
+			Transform transformPrefab		= prefab.transform;
+			transformPrefab.parent			= parentTransfom;
+			transformPrefab.localPosition	= position;
+			transformPrefab.localRotation	= rotation;
+			transformPrefab.localScale		= scale;
+			prefab.SetActive(true);
+			
+			if ( prefab.GetComponent<ParticleSystem>() ) {
+				StartCoroutine( WaitingForRelease( prefab, prefab.GetComponent<ParticleSystem>().duration ) );
+			}
+		}
+	}
 	/// <summary>
 	/// Waitings for release.
 	/// </summary>

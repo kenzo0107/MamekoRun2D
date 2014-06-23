@@ -11,7 +11,7 @@ public class DestroyCollisionGameObject : MonoBehaviour {
 	private void OnTriggerEnter2D( Collider2D coll ) {
 
 		if ( coll.gameObject.CompareTag( "DeadLine" ) ) {
-			Destroy( this.gameObject );
+			PrefabPoolManager.Instance.ReleasePrefab( this.gameObject );
 		}
 	}
 }

@@ -58,17 +58,17 @@ namespace PlayRunningGame.Player {
 		/// <summary>アニメーター.</summary>
 		private Animator	animator;
 
-		private enum AnimationStatusList {
-			Run,
-			JumpUp,
-			JumpRotate
-		}
-
-		private AnimationStatusList	animStatus;
+		private PlayerConfig.AnimationStatusList	animStatus;
 
 		/// <summary>点滅間隔.</summary>
 		private float blinkIntervalTime	= PlayRunningGameConfig.PlayerBlinkInterval;
 		#endregion
+
+		#region property
+		public Animation Anim {
+			get { return anim; }
+		}
+		#endregion property
 
 		/// <summary>
 		/// Sets the effect.
@@ -160,7 +160,7 @@ namespace PlayRunningGame.Player {
 			objHeadLeaf		= transform.FindChild( "BoneAnimation/Root/Total/Body/Head/Leaf" ).gameObject;
 
 			// animation 初期値.
-			animStatus	= AnimationStatusList.Run;
+			animStatus	= PlayerConfig.AnimationStatusList.Run;
 
 			moveObjectHandler	= this.GetComponent<MoveObject>();
 		}
@@ -177,12 +177,6 @@ namespace PlayRunningGame.Player {
 
 				if ( true == isGrounded ) {
 
-					// アニメーションがRunステータスでない場合、Runに設定.
-					if ( AnimationStatusList.Run != animStatus ) {
-						animStatus	= AnimationStatusList.Run;
-						SetAnimation( animStatus );
-					}
-
 					// 地上にいる場合のみ、砂埃を出す.
 					if ( false == dustStorm.activeSelf ) {
 						dustStorm.SetActive( true );
@@ -190,6 +184,12 @@ namespace PlayRunningGame.Player {
 
 					if ( jumpEnableCount < JumpEnableCountMax ) {
 						jumpEnableCount	= JumpEnableCountMax;
+					}
+
+					// アニメーションがRunステータスでない場合、Runに設定.
+					if ( PlayerConfig.AnimationStatusList.Run != animStatus ) {
+						animStatus	= PlayerConfig.AnimationStatusList.Run;
+						SetAnimation( animStatus );
 					}
 				}
 				// 空中にいる場合は砂埃を出さない.
@@ -241,6 +241,9 @@ namespace PlayRunningGame.Player {
 					ExecuteJump();
 				}
 			}
+			else {
+				dustStorm.SetActive( false );
+			}
 		}
 
 		/// <summary>
@@ -280,12 +283,12 @@ namespace PlayRunningGame.Player {
 		/// </summary>
 		private void Jump( float jumpforce ) {
 			// アニメーション - ジャンプ.
-			animStatus	= AnimationStatusList.JumpUp;
+			animStatus	= PlayerConfig.AnimationStatusList.JumpUp;
 			
 			// 空中ジャンプ中演出.
 			if ( true == isDoubleJump ) {
 				// アニメーション - 回転ジャンプ.
-				animStatus	= AnimationStatusList.JumpRotate;
+				animStatus	= PlayerConfig.AnimationStatusList.JumpRotate;
 				
 				PrefabPoolManager.Instance.instantiatePrefab( EffectConfig.PlayerJumpEffect, transform.localPosition, Quaternion.identity );
 			}
@@ -295,6 +298,7 @@ namespace PlayRunningGame.Player {
 
 			//  ジャンプSE再生.
 			AudioManager.Instance.PlaySE( AudioConfig.SePlayerJump );
+			Debug.Log ( "animStatus:" + animStatus );
 			SetAnimation( animStatus );
 		}
 
@@ -305,7 +309,7 @@ namespace PlayRunningGame.Player {
 		/// <param name="seName">Se name.</param>
 		private void Jump( float jumpforce, string seName ) {
 			// アニメーション - ジャンプ.
-			animStatus	= AnimationStatusList.JumpUp;
+			animStatus	= PlayerConfig.AnimationStatusList.JumpUp;
 
 			// アニメーション設定.
 			SetAnimation( animStatus );
@@ -320,8 +324,15 @@ namespace PlayRunningGame.Player {
 		/// Animation設定.
 		/// </summary>
 		/// <param name="status">Status.</param>
-		private void SetAnimation( AnimationStatusList status ) {
+		private void SetAnimation( PlayerConfig.AnimationStatusList status ) {
 			anim.Play ( System.Convert.ToString ( status ) );
+		}
+
+		/// <summary>
+		/// Stops the animation.
+		/// </summary>
+		public void StopAnimation( ) {
+			anim.Stop();
 		}
 
 		/// <summary>
