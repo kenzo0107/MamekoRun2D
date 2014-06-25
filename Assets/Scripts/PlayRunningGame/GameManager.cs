@@ -303,30 +303,45 @@ namespace PlayRunningGame {
 		}
 
 		/// <summary>
+		/// Raises the pause event.
+		/// </summary>
+		/// <param name="isPause">If set to <c>true</c> is pause.</param>
+		private void OnPause( bool isPause ) {
+
+			if ( isPause ) {
+				Bg0.SendMessage( "BrakeScroll" );
+				playerController.Anim.Stop ();
+				playerController.IsController	= false;
+				playerController.SpeedRight		= 0f;
+				playerController.rigidbody2D.isKinematic	= true;
+				chasePlayer.SpeedRight			= 0f;
+			}
+			else {
+				Bg0.SendMessage( "StartScroll" );
+				playerController.Anim.Play ();
+				playerController.IsController	= true;
+				playerController.SpeedRight		= PlayerConfig.DefaultSpeedRight;
+				playerController.rigidbody2D.isKinematic	= false;
+				chasePlayer.SpeedRight			= PlayerConfig.DefaultSpeedRight;
+			}
+		}
+
+		/// <summary>
 		/// 会話スタート.
 		/// </summary>
 		private void StartConversation( int comversationId ) {
-			Bg0.SendMessage( "BrakeScroll" );
-			playerController.Anim.Stop ();
-			playerController.IsController	= false;
-			playerController.SpeedRight		= 0f;
-			chasePlayer.SpeedRight			= 0f;
-
+			OnPause( true );
 			objConversation.SetActive( true );
 			objConversation.SendMessage( "NextTalk" );
 		}
 
-		#region OnGUI
-/*	
 		/// <summary>
-		/// Raises the GU event.
+		/// 会話終了.
 		/// </summary>
-		void OnGUI( ) {
-			if ( Config.IS_DEBUG ) {
-				GUI.Box( new Rect(5, 5, 300, 100), string.Format( "isCameraEnableChasePlayer : {0} \n", isCameraEnableChasePlayer ) );
-			}
+		private void EndConversation() {
+			OnPause( false );
+			Bg0.SendMessage( "StartScroll" );
+			objConversation.SetActive( false );
 		}
-*/
-		#endregion OnGUI
 	}
 }

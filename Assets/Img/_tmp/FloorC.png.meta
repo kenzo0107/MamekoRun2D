@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 65383c7c125704f47b56041b56d5f1c5
+guid: 3ede2665e9e694a0bb831b13bed6bf5d
 labels:
 - Uni2D_SourceTexture
 TextureImporter:
@@ -39,10 +39,10 @@ TextureImporter:
   spritePivot: {x: .5, y: .5}
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 100
-  alphaIsTransparency: 1
-  textureType: 8
+  alphaIsTransparency: 0
+  textureType: 5
   buildTargetSettings: []
   spriteSheet:
     sprites: []
-  spritePackingTag: Floor
+  spritePackingTag: 
   userData: 

@@ -24,6 +24,8 @@ namespace PlayRunningGame.Player {
 		public int			JumpEnableCountMax	= 1;
 		#endregion
 
+
+
 		#region private members.
 		/// <summary>ゲームマネージャーobj.</summary>
 		private GameObject	objGameManager;
@@ -59,7 +61,6 @@ namespace PlayRunningGame.Player {
 		private Animator	animator;
 
 		private PlayerConfig.AnimationStatusList	animStatus;
-
 		/// <summary>点滅間隔.</summary>
 		private float blinkIntervalTime	= PlayRunningGameConfig.PlayerBlinkInterval;
 		#endregion

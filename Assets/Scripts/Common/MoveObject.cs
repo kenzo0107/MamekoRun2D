@@ -13,9 +13,12 @@ public class MoveObject : MonoBehaviour {
 	#endregion public members.
 
 	#region private members.
-	private Vector2	fromVector;
-	private Vector2 toVector;
+	private Vector2	fromScaleVector;
+	private Vector2 toScaleVector;
+	private Vector2 fromRotateVector;
+	private Vector2 toRotateVector;
 	private Vector2	scaleVectorRate;
+	private Vector2	rotateVectorRate;
 	private	float	runTime;
 	private float	timer;
 	#endregion private members.
@@ -29,14 +32,7 @@ public class MoveObject : MonoBehaviour {
 	private void FixedUpdate( ) {
 
 		if ( true == isStart ) {
-			if ( timer < runTime ) {
-				timer	+= Time.deltaTime;
-				this.transform.localScale	= fromVector + scaleVectorRate * timer;
-			}
-			else {
-				this.IsStart	= false;
-				this.transform.localScale	= toVector;
-			}
+			SettingMove( );
 		}
 
 		if ( Vector3.zero != RotateDirection ) {
@@ -53,16 +49,50 @@ public class MoveObject : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// Sets the scale.
+	/// スケール設定.
 	/// </summary>
 	/// <param name="from">From.</param>
 	/// <param name="to">To.</param>
 	/// <param name="time">所要時間.</param>
 	public void SetScale( Vector2 from, Vector2 to, float time ) {
 		timer		= 0f;
-		fromVector	= from;
-		toVector	= to;
+		fromScaleVector	= from;
+		toScaleVector	= to;
 		runTime		= time;
-		scaleVectorRate	= ( toVector - fromVector ) / runTime;
+		scaleVectorRate	= ( toScaleVector - fromScaleVector ) / runTime;
+	}
+
+	/// <summary>
+	/// 回転設定.
+	/// </summary>
+	/// <param name="from">From.</param>
+	/// <param name="to">To.</param>
+	/// <param name="time">所要時間.</param>
+	public void SetRotation( Vector2 from, Vector2 to, float time ) {
+		timer		= 0f;
+		fromRotateVector	= from;
+		toRotateVector		= to;
+		runTime		= time;
+		rotateVectorRate	= ( toRotateVector - fromRotateVector ) / runTime;
+		Debug.Log ( "rotateVectorRate=" + rotateVectorRate );
+	}
+
+	/// <summary>
+	/// Settings the move.
+	/// </summary>
+	private void SettingMove() {
+		if ( timer < runTime ) {
+			timer	+= Time.deltaTime;
+		}
+		else {
+			this.IsStart	= false;
+		}
+			
+		if ( Vector2.zero != rotateVectorRate ) {
+			this.transform.rotation		= ( timer < runTime )?	Quaternion.Euler( fromRotateVector + rotateVectorRate * timer )	:	Quaternion.Euler( toRotateVector );
+		}
+		if( Vector2.zero !=  scaleVectorRate ) {
+			this.transform.localScale	= ( timer < runTime )?	fromScaleVector + scaleVectorRate * timer	:	toScaleVector;
+		}
 	}
 }

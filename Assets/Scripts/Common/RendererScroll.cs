@@ -54,4 +54,12 @@ public class RendererScroll : MonoBehaviour {
 		scrollLandScapeBrakeSpeed	= ( ScrollSpeedLandScape >= 0 )?	-ScrollSpeedLandScape / 100f	:	ScrollSpeedLandScape / 100f;
 		scrollVerticalBrakeSpeed	= ( ScrollSpeedVertical >= 0 )?		-ScrollSpeedVertical / 100f	:	ScrollSpeedVertical / 100f;
 	}
+
+	/// <summary>
+	/// Starts the scroll.
+	/// </summary>
+	private void StartScroll( ) {
+		ScrollSpeedLandScape	= defaultScrollSpeedLandScape;
+		ScrollSpeedVertical		= defaultScrollSpeedVertical;
+	}
 }

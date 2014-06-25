@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿ using UnityEngine;
 
 using System;
 using System.Collections;
@@ -27,7 +27,8 @@ public class ConversationConfig {
 
 	public static readonly string[][] TalkMap	= new string[][] {
 		new string[3] { "Player",	null, 				"あ、あなたは誰ですか？\nあわわ..." },
-		new string[3] { null,		"LegendaryWizard",	"わしは仙人じゃ！" }
+		new string[3] { null,		"LegendaryWizard",	"わしは仙人じゃ！" },
+		new string[3] { "Player",	null,				"せ、仙人！？\nあわわ..." }
 	};
 
 	public static string[] GetConversation( int Id ) {
