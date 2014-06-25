@@ -37,10 +37,15 @@ public class ConversationManager : MonoBehaviour {
 		conversationList	= ConversationConfig.GetConversation( talkId );
 		talkId	+= 1;
 
+		// 会話データが存在している場合.
 		if ( null != conversationList ) {
 			SetTeller ( conversationList[0], tellerLeft );
 			SetTeller ( conversationList[1], tellerRight );
 			uiLabelMessage.text	= conversationList[2];
+		}
+		// 会話データが存在していない場合.
+		else {
+			OnFinish( );
 		}
 	}
 
@@ -66,5 +71,12 @@ public class ConversationManager : MonoBehaviour {
 				transformBalloon.rotation = Quaternion.Euler( Vector2.zero );
 			}
 		}
+	}
+
+	/// <summary>
+	/// Raises the finish event.
+	/// </summary>
+	private void OnFinish( ) {
+		Debug.Log ( "OnFinish" );
 	}
 }
