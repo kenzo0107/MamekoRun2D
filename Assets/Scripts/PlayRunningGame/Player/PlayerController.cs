@@ -45,8 +45,6 @@ namespace PlayRunningGame.Player {
 		private GameObject	objHeadLeaf;
 
 		private GameObject	BoneAnimation;
-		/// <summary>接地しているかチェックするTransform.</summary>
-		private Transform	groundCheck;
 		/// <summary>接地しているか判定(true : 接地).</summary>
 		private bool		isGrounded		= false;
 		/// <summary>空中ジャンプが可能か判定(true : 可能).</summary>
@@ -147,8 +145,6 @@ namespace PlayRunningGame.Player {
 			// Setting up references.
 			objGameManager	= GameObject.Find ( "/_GameManager" );
 			gameManager		= objGameManager.GetComponent<GameManager>();
-
-			groundCheck = transform.FindChild( "groundCheck" );
 			dustStorm	= transform.FindChild( "Dust Storm" ).gameObject;
 			barrier		= transform.FindChild( "Barrier" ).gameObject;
 			transformBarrier	= barrier.transform;
@@ -174,7 +170,7 @@ namespace PlayRunningGame.Player {
 			// 操作可能.
 			if ( true == IsController ) {
 				// 地上にいるか判定.
-				isGrounded = Physics2D.Linecast( transform.position, groundCheck.position, 1 << LayerMask.NameToLayer("Ground") );
+				isGrounded = Physics2D.Linecast( transform.position, transform.position - transform.up * 0.3f, 1 << LayerMask.NameToLayer("Ground") );
 
 				if ( true == isGrounded ) {
 

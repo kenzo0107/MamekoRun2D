@@ -258,10 +258,10 @@ public class PrefabPoolManager : SingletonMonoBehaviour<PrefabPoolManager>{
 		}
 		else { 
 			prefab = familiy.GetReleasedPrefab();
-			Transform transformPrefab		= prefab.transform;
-			transformPrefab.parent			= parentTransfom;
-			transformPrefab.localPosition	= position;
-			transformPrefab.localRotation	= rotation;
+			Transform transformPrefab	= prefab.transform;
+			transformPrefab.parent		= parentTransfom;
+			transformPrefab.position	= position;
+			transformPrefab.rotation	= rotation;
 			prefab.SetActive(true);
 
 			if ( prefab.GetComponent<ParticleSystem>() ) {
