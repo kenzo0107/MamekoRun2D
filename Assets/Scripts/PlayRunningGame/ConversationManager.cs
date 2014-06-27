@@ -6,18 +6,23 @@ using PlayRunningGame;
 public class ConversationManager : MonoBehaviour {
 
 	#region private members.
-	private int			talkId	= 0;
+	private int			talkStep	= 0;
 	private string[]	conversationList	= new string[3];
 	private GameObject	tellerLeft;
 	private GameObject	tellerRight;
 	private UILabel		uiLabelMessage;
 	private MoveObject	balloonMoveObject;
 	private GameManager gameManager;
+	private int			conversationId;
 	#endregion private members.
 
-	/// <summary>
-	/// Initializes a new instance of the <see cref="ConversationManager"/> class.
-	/// </summary>
+	#region property
+	public	int			ConversationId { set { conversationId	= value; } }
+	#endregion
+
+/// <summary>
+/// Awake this instance.
+/// </summary>
 	private void Awake( ) {
 		gameManager	= GameObject.Find ( "_GameManager" ).GetComponent<GameManager>();
 		tellerLeft	= transform.FindChild( "TellerLeft" ).gameObject;
@@ -31,12 +36,12 @@ public class ConversationManager : MonoBehaviour {
 	/// </summary>
 	private void NextTalk( ) {
 
-		Debug.Log( "NextTalk" );
+		Debug.Log( "NextTalk conversationId=" + conversationId );
 
 		string colorMessage;
 
-		conversationList	= ConversationConfig.GetConversation( talkId );
-		talkId	+= 1;
+		conversationList	= ConversationConfig.GetConversation( conversationId, talkStep );
+		talkStep	+= 1;
 
 		// 会話データが存在している場合.
 		if ( null != conversationList ) {
@@ -94,6 +99,7 @@ public class ConversationManager : MonoBehaviour {
 	/// </summary>
 	private void OnFinish( ) {
 		Debug.Log ( "OnFinish" );
+		talkStep	= 0;
 		gameManager.SendMessage( "EndConversation" );
 	}
 }

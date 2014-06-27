@@ -62,8 +62,8 @@ namespace PlayRunningGame.Player {
 		/// <summary>点滅間隔.</summary>
 		private float blinkIntervalTime	= PlayRunningGameConfig.PlayerBlinkInterval;
 
-		private float		groundCheckDistance	= 0.3f;
-		private GameObject	groundCheck;
+		private float		groundCheckDistance	= 0.25f;
+
 		private BoxCollider2D	boxCollider2D;
 		#endregion
 
@@ -111,6 +111,9 @@ namespace PlayRunningGame.Player {
 		public void SetGigantic( bool isActive ) {
 			// 巨大化.
 			if ( true == isActive ) {
+
+				groundCheckDistance	= PlayerConfig.GiganticGroundCheck;
+
 				// プレイヤー巨大化終了SE.
 				AudioManager.Instance.PlaySE( AudioConfig.SePlayerGianticOn );
 				// 頭の上に葉っぱをつける.
@@ -119,20 +122,17 @@ namespace PlayRunningGame.Player {
 				SetEffect( EffectConfig.PlayerGianticEffect );
 
 				moveObjectHandler.SetScale( defaultPlayerLocalScale, defaultPlayerLocalScale * PlayRunningGameConfig.PlayerGiganticRate, 1f );
-				groundCheckDistance	= 1f;
-				boxCollider2D.center		= new Vector2( 0f, 0.05f );
 				moveObjectHandler.IsStart	= true;
 			}
 			// 元のサイズに戻る.
 			else {
+				groundCheckDistance	= PlayerConfig.DefaultGroundCheck;
 				// プレイヤー巨大化終了SE.
 				AudioManager.Instance.PlaySE( AudioConfig.SePlayerGianticOut );
 				// 頭の上に葉っぱを非活性.
 				SetHeadLeafOnPlayer( false );
 
 				moveObjectHandler.SetScale( defaultPlayerLocalScale * PlayRunningGameConfig.PlayerGiganticRate, defaultPlayerLocalScale, 0.05f );
-				groundCheckDistance	*= 1/PlayRunningGameConfig.PlayerGiganticRate;
-				boxCollider2D.center		= new Vector2( 0f, 0.19f );
 				moveObjectHandler.IsStart	= true;
 
 				SetRenderEnabled( true );
@@ -164,13 +164,14 @@ namespace PlayRunningGame.Player {
 
 			objHeadLeaf		= transform.FindChild( "BoneAnimation/Root/Total/Body/Head/Leaf" ).gameObject;
 
-			groundCheck		= transform.FindChild( "GroundCheck" ).gameObject;
 			boxCollider2D	= this.GetComponent<BoxCollider2D>();
 
 			// animation 初期値.
 			animStatus	= PlayerConfig.AnimationStatusList.Run;
 
 			moveObjectHandler	= this.GetComponent<MoveObject>();
+
+			groundCheckDistance	= PlayerConfig.DefaultGroundCheck;
 		}
 
 		/// <summary>
@@ -181,10 +182,13 @@ namespace PlayRunningGame.Player {
 			// 操作可能.
 			if ( true == IsController ) {
 				// 地上にいるか判定.
-//				isGrounded = Physics2D.Linecast( transform.position, transform.position - transform.up * groundCheckDistance, 1 << LayerMask.NameToLayer("Ground") );
-				isGrounded = Physics2D.Linecast( transform.position, groundCheck.transform.position, 1 << LayerMask.NameToLayer("Ground") );
-				if ( true == isGrounded ) {
+				isGrounded = Physics2D.Linecast( transform.position, transform.position - transform.up * groundCheckDistance, 1 << LayerMask.NameToLayer("Ground") );
+//				Debug.Log ( "isGrounded=" + isGrounded );
+				if ( this.rigidbody2D.velocity.y > 0 ) {
+					isGrounded	= false;
+				}
 
+				if ( true == isGrounded ) {
 					// 地上にいる場合のみ、砂埃を出す.
 					if ( false == dustStorm.activeSelf ) {
 						dustStorm.SetActive( true );
@@ -195,7 +199,7 @@ namespace PlayRunningGame.Player {
 					}
 
 					// アニメーションがRunステータスでない場合、Runに設定.
-					if ( PlayerConfig.AnimationStatusList.Run != animStatus ) {
+					if ( PlayerConfig.AnimationStatusList.Run != animStatus && this.rigidbody2D.velocity.y == 0  ) {
 						animStatus	= PlayerConfig.AnimationStatusList.Run;
 						SetAnimation( animStatus );
 					}
@@ -300,13 +304,11 @@ namespace PlayRunningGame.Player {
 				
 				PrefabPoolManager.Instance.instantiatePrefab( EffectConfig.PlayerJumpEffect, transform.localPosition, Quaternion.identity );
 			}
-			// アニメーション設定.
-			SetAnimation( animStatus );
 			this.rigidbody2D.velocity = Vector3.up * jumpforce;
 
 			//  ジャンプSE再生.
 			AudioManager.Instance.PlaySE( AudioConfig.SePlayerJump );
-			Debug.Log ( "animStatus:" + animStatus );
+			// アニメーション設定.
 			SetAnimation( animStatus );
 		}
 
@@ -316,15 +318,15 @@ namespace PlayRunningGame.Player {
 		/// <param name="jumpforce">Jumpforce.</param>
 		/// <param name="seName">Se name.</param>
 		private void Jump( float jumpforce, string seName ) {
+
 			// アニメーション - ジャンプ.
 			animStatus	= PlayerConfig.AnimationStatusList.JumpUp;
 
-			// アニメーション設定.
-			SetAnimation( animStatus );
 			this.rigidbody2D.velocity = Vector3.up * jumpforce;
 			
 			//  ジャンプSE再生.
 			AudioManager.Instance.PlaySE( seName );
+			// アニメーション設定.
 			SetAnimation( animStatus );
 		}
 

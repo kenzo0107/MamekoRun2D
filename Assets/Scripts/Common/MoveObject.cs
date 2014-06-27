@@ -74,7 +74,6 @@ public class MoveObject : MonoBehaviour {
 		toRotateVector		= to;
 		runTime		= time;
 		rotateVectorRate	= ( toRotateVector - fromRotateVector ) / runTime;
-		Debug.Log ( "rotateVectorRate=" + rotateVectorRate );
 	}
 
 	/// <summary>

@@ -59,6 +59,8 @@ public class RendererScroll : MonoBehaviour {
 	/// Starts the scroll.
 	/// </summary>
 	private void StartScroll( ) {
+		scrollLandScapeBrakeSpeed	= 0f;
+		scrollVerticalBrakeSpeed	= 0f;
 		ScrollSpeedLandScape	= defaultScrollSpeedLandScape;
 		ScrollSpeedVertical		= defaultScrollSpeedVertical;
 	}

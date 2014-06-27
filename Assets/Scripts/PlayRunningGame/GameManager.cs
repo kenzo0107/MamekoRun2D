@@ -49,17 +49,22 @@ namespace PlayRunningGame {
 		/// <summary>Cameraのプレイヤー追跡可能判定.</summary>
 		private bool				isCameraEnableChasePlayer;
 		/// <summary>chasePlayerCamera最大ローカルポジション(X軸).</summary>
-		private float				maxChasePlayerCameraLocalPositionX;
+		private int				maxChasePlayerCameraLocalPositionX;
 		/// <summary>フロアマップマネージャー.</summary>
 		private FloorMapManager				floorMapManager;
 		/// <summary>会話.</summary>
 		private GameObject			objConversation;
+		/// <summary>ConversationManager.</summary>
+		private ConversationManager	conversationManager;
 
+		/// <summary>Anchor transform.</summary>
 		private Transform	AnchorTransform;
+		/// <summary>Player transform.</summary>
 		private Transform	playerTransform;
+		/// <summary>chasePlayerCamera transform.</summary>
 		private Transform	chasePlayerCameraTransform;
-
-		private float		feverStartPlayerPosX;
+		/// <summary>フィーバー開始プレイヤーX座標位置.</summary>
+		private int		feverStartPlayerPosX;
 		/// <summary>プレイヤー巨大化残り時間.</summary>
 		private float		playerGiganticRemainTime;
 		#endregion
@@ -87,6 +92,7 @@ namespace PlayRunningGame {
 			floorMapManager				= this.GetComponent<FloorMapManager>();
 			bgFever						= chasePlayerCameraTransform.FindChild( "BgFever" ).gameObject;
 			objConversation				= AnchorTransform.FindChild( "Conversation" ).gameObject;
+			conversationManager			= objConversation.GetComponent<ConversationManager>();
 		}
 
 		/// <summary>
@@ -142,10 +148,12 @@ namespace PlayRunningGame {
 				chasePlayerCameraPosition	= chasePlayerCameraTransform.position;
 
 				if ( maxChasePlayerCameraLocalPositionX < Mathf.Floor( chasePlayerCameraPosition.x ) ) {
-					maxChasePlayerCameraLocalPositionX	= Mathf.Floor( chasePlayerCameraPosition.x );
+					maxChasePlayerCameraLocalPositionX	= (int)Mathf.Floor( chasePlayerCameraPosition.x );
 
-					if ( maxChasePlayerCameraLocalPositionX == 5 ) {
-						StartConversation( 5 );
+					// トークが存在する場合.
+					if ( ConversationConfig.IsConversation( maxChasePlayerCameraLocalPositionX ) ) {
+						// 会話開始.
+						StartConversation( maxChasePlayerCameraLocalPositionX );
 					}
 
 					// フィーバー状態の場合.
@@ -153,10 +161,10 @@ namespace PlayRunningGame {
 						if ( feverStartPlayerPosX + PlayRunningGameConfig.FloorMapForFeverLength() <= maxChasePlayerCameraLocalPositionX ) {
 							SetFeverFinish();
 						}
-						floorMapManager.InstantiateFloorFever( (int)maxChasePlayerCameraLocalPositionX, (int)feverStartPlayerPosX );
+						floorMapManager.InstantiateFloorFever( maxChasePlayerCameraLocalPositionX, (int)feverStartPlayerPosX );
 					}
 					else {
-						floorMapManager.InstantiateFloor( (int)maxChasePlayerCameraLocalPositionX );
+						floorMapManager.InstantiateFloor( maxChasePlayerCameraLocalPositionX );
 					}
 				}
 				
@@ -329,9 +337,11 @@ namespace PlayRunningGame {
 		/// <summary>
 		/// 会話スタート.
 		/// </summary>
-		private void StartConversation( int comversationId ) {
+		private void StartConversation( int conversationId ) {
 			OnPause( true );
 			objConversation.SetActive( true );
+			conversationManager.ConversationId	= conversationId;
+
 			objConversation.SendMessage( "NextTalk" );
 		}
 
