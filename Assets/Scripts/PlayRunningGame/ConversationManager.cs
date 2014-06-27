@@ -33,19 +33,20 @@ public class ConversationManager : MonoBehaviour {
 
 		Debug.Log( "NextTalk" );
 
+		string colorMessage;
+
 		conversationList	= ConversationConfig.GetConversation( talkId );
 		talkId	+= 1;
 
 		// 会話データが存在している場合.
 		if ( null != conversationList ) {
 			// 左側語り手が指定されている場合.
-			if ( false == string.IsNullOrEmpty( conversationList[0] ) ) {
+			colorMessage	= ( string.IsNullOrEmpty( conversationList[0] ) ) ?	ColorConfig.Black	:	ColorConfig.Pink;
 
-			}
 			SetTeller ( conversationList[0], tellerLeft );
 			SetTeller ( conversationList[1], tellerRight );
 			SetBalloon( conversationList ); 
-			uiLabelMessage.text	= conversationList[2];
+			uiLabelMessage.text	= colorMessage + conversationList[2];
 		}
 		// 会話データが存在していない場合.
 		else {
@@ -84,7 +85,7 @@ public class ConversationManager : MonoBehaviour {
 		from	= ( isLeftTellerActive )?	0		:	180f;
 		to		= ( isLeftTellerActive )?	180f	:	0f;
 
-		balloonMoveObject.SetRotation( new Vector2( 0f, from ), new Vector2( 0f, to ), 0.5f );
+		balloonMoveObject.SetRotation( new Vector2( 0f, from ), new Vector2( 0f, to ), 0.3f );
 		balloonMoveObject.IsStart	= true;
 	}
 

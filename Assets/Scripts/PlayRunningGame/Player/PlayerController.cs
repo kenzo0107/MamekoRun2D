@@ -61,6 +61,10 @@ namespace PlayRunningGame.Player {
 		private PlayerConfig.AnimationStatusList	animStatus;
 		/// <summary>点滅間隔.</summary>
 		private float blinkIntervalTime	= PlayRunningGameConfig.PlayerBlinkInterval;
+
+		private float		groundCheckDistance	= 0.3f;
+		private GameObject	groundCheck;
+		private BoxCollider2D	boxCollider2D;
 		#endregion
 
 		#region property
@@ -115,6 +119,8 @@ namespace PlayRunningGame.Player {
 				SetEffect( EffectConfig.PlayerGianticEffect );
 
 				moveObjectHandler.SetScale( defaultPlayerLocalScale, defaultPlayerLocalScale * PlayRunningGameConfig.PlayerGiganticRate, 1f );
+				groundCheckDistance	= 1f;
+				boxCollider2D.center		= new Vector2( 0f, 0.05f );
 				moveObjectHandler.IsStart	= true;
 			}
 			// 元のサイズに戻る.
@@ -125,6 +131,8 @@ namespace PlayRunningGame.Player {
 				SetHeadLeafOnPlayer( false );
 
 				moveObjectHandler.SetScale( defaultPlayerLocalScale * PlayRunningGameConfig.PlayerGiganticRate, defaultPlayerLocalScale, 0.05f );
+				groundCheckDistance	*= 1/PlayRunningGameConfig.PlayerGiganticRate;
+				boxCollider2D.center		= new Vector2( 0f, 0.19f );
 				moveObjectHandler.IsStart	= true;
 
 				SetRenderEnabled( true );
@@ -156,6 +164,9 @@ namespace PlayRunningGame.Player {
 
 			objHeadLeaf		= transform.FindChild( "BoneAnimation/Root/Total/Body/Head/Leaf" ).gameObject;
 
+			groundCheck		= transform.FindChild( "GroundCheck" ).gameObject;
+			boxCollider2D	= this.GetComponent<BoxCollider2D>();
+
 			// animation 初期値.
 			animStatus	= PlayerConfig.AnimationStatusList.Run;
 
@@ -170,8 +181,8 @@ namespace PlayRunningGame.Player {
 			// 操作可能.
 			if ( true == IsController ) {
 				// 地上にいるか判定.
-				isGrounded = Physics2D.Linecast( transform.position, transform.position - transform.up * 0.3f, 1 << LayerMask.NameToLayer("Ground") );
-
+//				isGrounded = Physics2D.Linecast( transform.position, transform.position - transform.up * groundCheckDistance, 1 << LayerMask.NameToLayer("Ground") );
+				isGrounded = Physics2D.Linecast( transform.position, groundCheck.transform.position, 1 << LayerMask.NameToLayer("Ground") );
 				if ( true == isGrounded ) {
 
 					// 地上にいる場合のみ、砂埃を出す.
