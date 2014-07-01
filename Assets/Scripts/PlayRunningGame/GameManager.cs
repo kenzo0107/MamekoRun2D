@@ -107,7 +107,15 @@ namespace PlayRunningGame {
 		/// </summary>
 		private void FixedUpdate( ) {
 
-			if ( true  == playerController.IsDead || false == isPlayerGigantic ) {
+			if ( true  == playerController.IsDead ) {
+				return;
+			}
+
+			if ( true == playerController.IsInWater ) {
+				AudioManager.Instance.PlayBGM( AudioConfig.PlayerInWater );
+			}
+
+			if ( false == isPlayerGigantic ) {
 				return;
 			}
 
@@ -318,7 +326,7 @@ namespace PlayRunningGame {
 
 			if ( isPause ) {
 				Bg0.SendMessage( "BrakeScroll" );
-				playerController.Anim.Stop ();
+				playerController.StopAnimation();
 				playerController.IsController	= false;
 				playerController.SpeedRight		= 0f;
 				playerController.rigidbody2D.isKinematic	= true;
@@ -326,7 +334,7 @@ namespace PlayRunningGame {
 			}
 			else {
 				Bg0.SendMessage( "StartScroll" );
-				playerController.Anim.Play ();
+				playerController.RestartAnimation();
 				playerController.IsController	= true;
 				playerController.SpeedRight		= PlayerConfig.DefaultSpeedRight;
 				playerController.rigidbody2D.isKinematic	= false;

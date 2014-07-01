@@ -18,13 +18,16 @@
 		/// <summary>接地判定までの距離.</summary>
 		public static readonly float DefaultGroundCheck		= 0.515f;
 		public static readonly float GiganticGroundCheck	= 1.03f;
+		/// <summary>水泳時上方移動力.</summary>
+		public static readonly float SwimVerticalForce		= 5f;
 
 		/// <summery>アニメーションステータス一覧.</summery>
 		public enum AnimationStatusList {
 			Run,
 			JumpUp,
 			JumpRotate,
-			Sit
+			Sit,
+			Swim
 		}
 	}
 }

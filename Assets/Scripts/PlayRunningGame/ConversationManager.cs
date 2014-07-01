@@ -36,8 +36,6 @@ public class ConversationManager : MonoBehaviour {
 	/// </summary>
 	private void NextTalk( ) {
 
-		Debug.Log( "NextTalk conversationId=" + conversationId );
-
 		string colorMessage;
 
 		conversationList	= ConversationConfig.GetConversation( conversationId, talkStep );

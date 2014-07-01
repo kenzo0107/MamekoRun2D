@@ -15,7 +15,7 @@ public class ConversationConfig {
 	/// <summary>プレイヤー移動距離の到達地点毎の会話リスト.</summary>
 	public static readonly IDictionary<int, string[][]>Distance2ConversationList	= new Dictionary<int, string[][]> {
 		{
-			5,
+			20,
 			new string[][] {
 				new string[3] { "Player",	null, 				"あ、あなたは誰ですか？\nあわわ..." },
 				new string[3] { null,		"LegendaryWizard",	"わしは仙人じゃ！" },
@@ -23,7 +23,7 @@ public class ConversationConfig {
 			}
 		},
 		{
-			7,
+			21,
 			new string[][] {
 				new string[3] { null,		"LegendaryWizard",	"ちょ、ちょ待てよ！" },
 				new string[3] { "Player",	null,				"え、何ですか？" },
@@ -52,8 +52,6 @@ public class ConversationConfig {
 		if ( step >= Distance2ConversationList[ id ].Length ) {
 			return null;
 		}
-
-		Debug.Log ( String.Format( "TalkMap:[{0}][0]={1}, [1]={2}, [2]={3}" , step,  Distance2ConversationList[ id ][ step ][0], Distance2ConversationList[ id ][ step ][1], Distance2ConversationList[ id ][ step ][2] ) );
 		return Distance2ConversationList[ id ][ step ];
 	}
 }

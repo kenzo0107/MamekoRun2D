@@ -20,6 +20,8 @@ namespace Audio {
 
 		/// <summary>プレイランニング 無敵状態BGM.</summary>
 		public static readonly string PlayRunningUnrivaled	= "bgm2";
+		/// <summary>プレイランニング 無敵状態BGM.</summary>
+		public static readonly string PlayerInWater			= "bgm3";
 
 		#region se.
 		/// <summary>SE プレイヤージャンプ.</summary>
@@ -34,6 +36,8 @@ namespace Audio {
 		public static readonly string SePlayerFever			= "se_fever";
 		/// <summary>SE プレイヤーフィーバー終了.</summary>
 		public static readonly string SePlayerFeverOut		= "se_fever_out";
+		/// <summary>SE 泳ぎ.</summary>
+		public static readonly string SePlayerSwim			= "se_swim";
 
 		/// <summary>SE プレイヤー巨大化.</summary>
 		public static readonly string SePlayerGianticOn		= "se_doron";

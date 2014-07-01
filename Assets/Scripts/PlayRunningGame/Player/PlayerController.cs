@@ -20,6 +20,8 @@ namespace PlayRunningGame.Player {
 		public bool			IsDead			= false;
 		/// <summary>ジャンプ可能か判定(true : 可能).</summary>
 		public bool			IsJumpEnabaled	= false;
+		/// <summary>水中判定(true : 水中).</summary>
+		public bool			IsInWater		= false;
 		/// <summary>ジャンプ可能最大数.</summary>
 		public int			JumpEnableCountMax	= 1;
 		#endregion
@@ -180,17 +182,29 @@ namespace PlayRunningGame.Player {
 		private void Update () {
 
 			// 操作可能.
-			if ( true == IsController ) {
-				// 地上にいるか判定.
-				isGrounded = Physics2D.Linecast( transform.position, transform.position - transform.up * groundCheckDistance, 1 << LayerMask.NameToLayer("Ground") );
-//				Debug.Log ( "isGrounded=" + isGrounded );
-				if ( this.rigidbody2D.velocity.y > 0 ) {
-					isGrounded	= false;
+			if ( IsController ) {
+
+				// 水中.
+				if ( IsInWater ) {
+					if ( animStatus != PlayerConfig.AnimationStatusList.Swim ) {
+						animStatus	= PlayerConfig.AnimationStatusList.Swim;
+						SetAnimation( animStatus );
+					}
+
+					if ( TouchManager.IsTouchBegan() ) {
+						Swim( PlayerConfig.SwimVerticalForce, AudioConfig.SePlayerSwim );
+					}
+
+					return;
 				}
 
-				if ( true == isGrounded ) {
+
+				// 地上にいるか判定.
+				isGrounded = Physics2D.Linecast( transform.position, transform.position - transform.up * groundCheckDistance, 1 << LayerMask.NameToLayer("Ground") );
+
+				if ( isGrounded ) {
 					// 地上にいる場合のみ、砂埃を出す.
-					if ( false == dustStorm.activeSelf ) {
+					if ( !dustStorm.activeSelf ) {
 						dustStorm.SetActive( true );
 					}
 
@@ -212,47 +226,26 @@ namespace PlayRunningGame.Player {
 				IsJumpEnabaled	= false;
 				isDoubleJump	= false;
 
-#if UNITY_EDITOR
-				if ( Input.GetMouseButtonDown(0) ) {
-					if ( true == isGrounded ) {
+				// スクリーンタッチ時.
+				if ( TouchManager.IsTouchBegan() ) {
+					// 地上にいる場合.
+					if ( isGrounded ) {
+						// ジャンプ可能.
 						IsJumpEnabaled	= true;
-						jump	= JumpForce;
 					}
-					else if( false == isGrounded && 0 < jumpEnableCount ) {
-						jump	= JumpForce;
+					// 空中にいる、且つ、残りジャンプ回数が0より大きい場合.
+					else if( !isGrounded && 0 < jumpEnableCount ) {
 						IsJumpEnabaled	= true;
 						isDoubleJump	= true;
 						jumpEnableCount--;
 					}
 				}
-#else
-				if ( Input.touchCount > 0 ) {
-					
-					foreach ( Touch touch in Input.touches ) {
-						
-						// タッチ or ムーブの場合.
-						if ( 
-						    Input.GetTouch(0).phase == TouchPhase.Began
-						    ) {
 
-							if ( true == isGrounded ) {
-								IsJumpEnabaled	= true;
-							}
-							else if( false == isGrounded && 0 < jumpEnableCount ) {
-								IsJumpEnabaled	= true;
-								isDoubleJump	= true;
-								jumpEnableCount--;
-							}
-
-						}
-					}
-				}
-#endif
-
-				if ( true == IsJumpEnabaled && 0 < jumpEnableCount ) {
+				if ( IsJumpEnabaled && 0 < jumpEnableCount ) {
 					ExecuteJump();
 				}
 			}
+			//  操作不可能状態の場合.
 			else {
 				dustStorm.SetActive( false );
 			}
@@ -298,7 +291,7 @@ namespace PlayRunningGame.Player {
 			animStatus	= PlayerConfig.AnimationStatusList.JumpUp;
 			
 			// 空中ジャンプ中演出.
-			if ( true == isDoubleJump ) {
+			if ( isDoubleJump ) {
 				// アニメーション - 回転ジャンプ.
 				animStatus	= PlayerConfig.AnimationStatusList.JumpRotate;
 				
@@ -331,6 +324,17 @@ namespace PlayRunningGame.Player {
 		}
 
 		/// <summary>
+		/// Swim the specified jumpforce and seName.
+		/// </summary>
+		/// <param name="jumpforce">Jumpforce.</param>
+		/// <param name="seName">Se name.</param>
+		private void Swim( float jumpforce, string seName ) {
+			//  泳ぎSE再生.
+			AudioManager.Instance.PlaySE( seName );
+			this.rigidbody2D.velocity = Vector3.up * jumpforce;
+		}
+
+		/// <summary>
 		/// Animation設定.
 		/// </summary>
 		/// <param name="status">Status.</param>
@@ -339,10 +343,16 @@ namespace PlayRunningGame.Player {
 		}
 
 		/// <summary>
-		/// Stops the animation.
+		/// アニメーションストップ.
 		/// </summary>
 		public void StopAnimation( ) {
 			anim.Stop();
+		}
+		/// <summary>
+		/// アニメーション再開.
+		/// </summary>
+		public void RestartAnimation( ) {
+			SetAnimation( animStatus );
 		}
 
 		/// <summary>
@@ -365,7 +375,7 @@ namespace PlayRunningGame.Player {
 			// 敵と衝突.
 			if ( coll.gameObject.CompareTag( "KillPlayer" )  ) {
 				// プレイヤー巨大化状態でない場合.
-				if ( false == gameManager.IsPlayerGigantic ) {
+				if ( !gameManager.IsPlayerGigantic ) {
 					// プレイヤーデッド.
 					IsDead	= true;
 				}
@@ -396,6 +406,11 @@ namespace PlayRunningGame.Player {
 		/// <param name="coll">Coll.</param>
 		private void OnTriggerEnter2D( Collider2D coll ) {
 
+			// 水に接している場合、水中判定true.
+			if ( coll.gameObject.CompareTag( "Water" ) && !IsInWater ) {
+				IsInWater	= true;
+			}
+
 			if ( coll.gameObject.CompareTag( "EnemyHeader" )  ) {
 				Debug.Log ( "OnTriggerEnter2D:EnemyHeader" );
 				coll.gameObject.SendMessage( "DestroyObj" );
@@ -416,7 +431,7 @@ namespace PlayRunningGame.Player {
 
 			if ( coll.gameObject.CompareTag( "KillPlayer" )  ) {
 				// 敵と衝突.
-				if ( false == gameManager.IsPlayerGigantic ) {
+				if ( !gameManager.IsPlayerGigantic ) {
 					IsDead	= true;
 				}
 				// プレイヤー巨大化状態の場合.
@@ -426,6 +441,18 @@ namespace PlayRunningGame.Player {
 					coll.gameObject.SendMessage( "DestroyObj" );
 					return;
 				}
+			}
+		}
+
+		/// <summary>
+		/// Raises the trigger exit2 d event.
+		/// </summary>
+		/// <param name="coll">Coll.</param>
+		private void OnTriggerExit2D( Collider2D coll ) {
+			// 水に接している場合、水中判定true.
+			if ( coll.gameObject.CompareTag( "Water" ) && IsInWater ) {
+				Debug.Log ( "OnTriggerExit2D" );
+				IsInWater	= false;
 			}
 		}
 
