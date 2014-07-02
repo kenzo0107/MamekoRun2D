@@ -216,9 +216,7 @@ public class PrefabPoolManager : SingletonMonoBehaviour<PrefabPoolManager>{
 			prefab.name=prefabName;
 			familiy.Add(prefab);
 		}
-		else { 
-//		//2.リリースしてあるのがあればそれを使う.
-//		if(familiy.releasedAmount>0){
+		else {
 			prefab = familiy.GetReleasedPrefab();
 			Transform transformPrefab	= prefab.transform;
 			transformPrefab.position	= position;

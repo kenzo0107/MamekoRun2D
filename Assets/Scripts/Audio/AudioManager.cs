@@ -37,6 +37,7 @@ namespace Audio {
 			}
 			//create audio sources.
 			this.bgmSource = this.gameObject.AddComponent<AudioSource>();
+			this.bgmSource.loop	= true;
 			this.seSources = new List<AudioSource>();
 			
 			//create clip dictionaries.
@@ -118,7 +119,9 @@ namespace Audio {
 		/// </summary>
 		/// <param name="bgmName">Bgm name.</param>
 		public void PlayBGM( string bgmName ) {
-			if( !this.bgmDict.ContainsKey( bgmName ) ) throw new ArgumentException(bgmName + " not found","bgmName");  
+			if( !this.bgmDict.ContainsKey( bgmName ) ) {
+				throw new ArgumentException(bgmName + " not found","bgmName");
+			}
 
 			if( this.bgmSource.clip == this.bgmDict[bgmName] ) return;
 			this.bgmSource.Stop();

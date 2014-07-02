@@ -17,18 +17,19 @@ public class ConversationConfig {
 		{
 			20,
 			new string[][] {
-				new string[3] { "Player",	null, 				"あ、あなたは誰ですか？\nあわわ..." },
-				new string[3] { null,		"LegendaryWizard",	"わしは仙人じゃ！" },
-				new string[3] { "Player",	null,				"そうですか、では！" },
+				new string[3] { "PlayerInConversation",	null, 								"あ、あなたは誰ですか？\nあわわ..." },
+				new string[3] { null,					"LegendaryWizardInConversation",	"わしは仙人じゃ！" },
+				new string[3] { "PlayerInConversation",	null,								"そうですか、では！" },
 			}
 		},
 		{
 			21,
 			new string[][] {
-				new string[3] { null,		"LegendaryWizard",	"ちょ、ちょ待てよ！" },
-				new string[3] { "Player",	null,				"え、何ですか？" },
-				new string[3] { null,		"LegendaryWizard",	"これから\n長い旅のはじまりじゃ\n心してかかれよ！" },
-				new string[3] { "Player",	null,				"は、はい！\n\n（一体誰？？\n見たことあるような…）" },
+				new string[3] { null,					"LegendaryWizardInConversation",	"ちょ、ちょ待てよ！" },
+				new string[3] { "PlayerInConversation",	null,								"え、何ですか？" },
+				new string[3] { null,					"LegendaryWizardInConversation",	"これから\n長い旅のはじまりじゃ\n心してかかれよ！" },
+				new string[3] { "PlayerInConversation",	null,								"は、はい！" },
+				new string[3] { "PlayerInConversation",	null,								"一体誰？？\n見たことあるような…" },
 			}
 		},
 	};
