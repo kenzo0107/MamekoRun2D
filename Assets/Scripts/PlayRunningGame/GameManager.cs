@@ -173,11 +173,13 @@ namespace PlayRunningGame {
 						StartConversation( maxChasePlayerCameraLocalPositionX );
 					}
 
+					// 海ステージへの切り替え処理開始.
 					if ( maxChasePlayerCameraLocalPositionX == PlayRunningGameConfig.SeaStageStart ) {
 						bgWave.SetActive( true );
 						AudioManager.Instance.PlaySE( AudioConfig.SeWave );
 					}
-					if ( maxChasePlayerCameraLocalPositionX == PlayRunningGameConfig.SeaStageStart + 40 ) {
+					// 海ステージへの切り替え.
+					if ( maxChasePlayerCameraLocalPositionX == PlayRunningGameConfig.SeaStageStart + PlayRunningGameConfig.ChangeSeaStage ) {
 						waveXL.SetActive( true );
 					}
 

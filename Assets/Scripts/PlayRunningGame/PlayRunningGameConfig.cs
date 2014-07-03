@@ -8,6 +8,7 @@ namespace PlayRunningGame {
 
 		/// <summary>海ステージ開始距離.</summary>
 		public static readonly int		SeaStageStart		= 40;
+		public static readonly int		ChangeSeaStage		= 40;
 
 		/// <summary>プレイヤーの巨大化期間.</summary>
 		public static readonly float	PlayerGiganticTerm	= 8f;
