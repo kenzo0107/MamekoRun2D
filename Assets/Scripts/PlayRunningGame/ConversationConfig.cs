@@ -32,6 +32,18 @@ public class ConversationConfig {
 				new string[3] { "PlayerInConversation",	null,								"一体誰？？\n見たことあるような…" },
 			}
 		},
+		{
+			30,
+			new string[][] {
+				new string[3] { null,					"CloudInConversation",				"おや、マメコかい？" },
+				new string[3] { "PlayerInConversation",	null,								"あっクラウド先生！" },
+				new string[3] { null,					"CloudInConversation",				"ふふふ、今日もうさぎだな" },
+				new string[3] { "PlayerInConversation",	null,								"（腹立つな…）" },
+				new string[3] { null,					"CloudInConversation",				"この先大シケだよ\n気をつけるといい" },
+				new string[3] { "PlayerInConversation",	null,								"はいっ\nありがとうございます！" },
+			}
+		},
+	
 	};
 
 	/// <summary>

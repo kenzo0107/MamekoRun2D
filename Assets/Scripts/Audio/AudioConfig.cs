@@ -45,6 +45,9 @@ namespace Audio {
 		public static readonly string SePlayerGianticOut	= "se_gigantic_out";
 		/// <summary>SE 敵デッド.</summary>
 		public static readonly string EnemyDie				= "se_enemy_die";
+		/// <summary>SE波の音.</summary>
+		public static readonly string SeWave				= "se_wave";
+
 		#endregion se.
 	}
 }

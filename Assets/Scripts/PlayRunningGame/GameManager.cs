@@ -56,6 +56,12 @@ namespace PlayRunningGame {
 		private GameObject			objConversation;
 		/// <summary>ConversationManager.</summary>
 		private ConversationManager	conversationManager;
+		/// <summary>海ステージ.</summary>
+		private GameObject			waterPlane;
+		/// <summary>波背景.</summary>
+		private GameObject			bgWave;
+		/// <summary>巨大波.</summary>
+		private GameObject			waveXL;
 
 		/// <summary>Anchor transform.</summary>
 		private Transform	AnchorTransform;
@@ -93,6 +99,9 @@ namespace PlayRunningGame {
 			bgFever						= chasePlayerCameraTransform.FindChild( "BgFever" ).gameObject;
 			objConversation				= AnchorTransform.FindChild( "Conversation" ).gameObject;
 			conversationManager			= objConversation.GetComponent<ConversationManager>();
+			bgWave						= chasePlayerCameraTransform.FindChild( "BgWave" ).gameObject;
+			waterPlane					= chasePlayerCameraTransform.FindChild( "WaterPlane" ).gameObject;
+			waveXL						= chasePlayerCameraTransform.FindChild( "WaveXL" ).gameObject;
 		}
 
 		/// <summary>
@@ -162,6 +171,14 @@ namespace PlayRunningGame {
 					if ( ConversationConfig.IsConversation( maxChasePlayerCameraLocalPositionX ) ) {
 						// 会話開始.
 						StartConversation( maxChasePlayerCameraLocalPositionX );
+					}
+
+					if ( maxChasePlayerCameraLocalPositionX == PlayRunningGameConfig.SeaStageStart ) {
+						bgWave.SetActive( true );
+						AudioManager.Instance.PlaySE( AudioConfig.SeWave );
+					}
+					if ( maxChasePlayerCameraLocalPositionX == PlayRunningGameConfig.SeaStageStart + 40 ) {
+						waveXL.SetActive( true );
 					}
 
 					// フィーバー状態の場合.
@@ -360,6 +377,14 @@ namespace PlayRunningGame {
 			OnPause( false );
 			Bg0.SendMessage( "StartScroll" );
 			objConversation.SetActive( false );
+		}
+
+		/// Sets the active water plane.
+		/// </summary>
+		/// <param name="isActive">If set to <c>true</c> is active.</param>
+		public void SetActiveWaterPlane( bool isActive ) {
+			waterPlane.SetActive( isActive );
+			bgWave.SetActive( !isActive );
 		}
 	}
 }
