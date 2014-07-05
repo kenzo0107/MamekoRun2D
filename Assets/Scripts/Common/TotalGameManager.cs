@@ -20,11 +20,13 @@ public class TotalGameManager : SingletonMonoBehaviour<TotalGameManager> {
 		DontDestroyOnLoad(this.gameObject);
 
 		// AudioManager.
-		audioManager	= getGameObj( "AudioManager" );
+		InstanceGameObj( "AudioManager" );
+
+		InstanceGameObj( "DataTranceiver" );
 
 		if ( true == Config.IS_DEBUG ) {
 			// DebugManager.
-			debugManager	= getGameObj( "DebugManager" );
+			InstanceGameObj( "DebugManager" );
 		}
 	}
 
@@ -33,7 +35,7 @@ public class TotalGameManager : SingletonMonoBehaviour<TotalGameManager> {
 	/// </summary>
 	/// <returns>The game obje.</returns>
 	/// <param name="objName">Object name.</param>
-	private GameObject getGameObj( string objName ) {
+	private GameObject InstanceGameObj( string objName ) {
 
 		GameObject objManager	= GameObject.Find( objName );
 

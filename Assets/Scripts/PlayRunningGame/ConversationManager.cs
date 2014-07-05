@@ -95,7 +95,6 @@ public class ConversationManager : MonoBehaviour {
 	/// Raises the finish event.
 	/// </summary>
 	private void OnFinish( ) {
-		Debug.Log ( "OnFinish" );
 		tellerLeft.SetActive( true );
 		tellerRight.SetActive( true );
 
