@@ -31,6 +31,13 @@ public class AnimationEvent : MonoBehaviour {
 	}
 
 	/// <summary>
+	/// Changes to sea stage.
+	/// </summary>
+	private void ChangeToSeaStage( ) {
+		gameManager.ChangeToSeaStage();
+	}
+
+	/// <summary>
 	/// Sets the un active.
 	/// </summary>
 	private void SetUnActive( ) {

@@ -67,6 +67,7 @@ namespace PlayRunningGame.Player {
 		private float		groundCheckDistance	= 0.25f;
 
 		private BoxCollider2D	boxCollider2D;
+		private Rigidbody2D		rigidBody2D;
 		#endregion
 
 		#region property
@@ -144,6 +145,19 @@ namespace PlayRunningGame.Player {
 		}
 
 		/// <summary>
+		/// Fixeds the position.
+		/// </summary>
+		/// <param name="vec">Vec.</param>
+		public void FixedPosition( Vector2 vec ) {
+			transform.localPosition	= vec;
+			rigidBody2D.isKinematic	= true;
+		}
+
+		public void SetIsKinematic( bool isActive ) {
+			rigidbody2D.isKinematic	= isActive;
+		}
+
+		/// <summary>
 		/// Awake this instance.
 		/// </summary>
 		private void Awake( ) {
@@ -174,6 +188,8 @@ namespace PlayRunningGame.Player {
 			moveObjectHandler	= this.GetComponent<MoveObject>();
 
 			groundCheckDistance	= PlayerConfig.DefaultGroundCheck;
+
+			rigidBody2D	= this.GetComponent<Rigidbody2D>();
 		}
 
 		/// <summary>

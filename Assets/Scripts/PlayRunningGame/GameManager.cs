@@ -385,8 +385,16 @@ namespace PlayRunningGame {
 		/// </summary>
 		/// <param name="isActive">If set to <c>true</c> is active.</param>
 		public void SetActiveWaterPlane( bool isActive ) {
+			playerController.FixedPosition( new Vector2( playerPosition.x, 10f ) );
 			waterPlane.SetActive( isActive );
 			bgWave.SetActive( !isActive );
+		}
+
+		/// <summary>
+		/// Changes to sea stage.
+		/// </summary>
+		public void ChangeToSeaStage( ) {
+			playerController.SetIsKinematic( false );
 		}
 	}
 }
